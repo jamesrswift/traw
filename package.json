@@ -1,0 +1,35 @@
+{
+  "name": "traw",
+  "version": "1.0.0",
+  "description": "Typescript Reddit API Wrapper",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesxX/traw.git"
+  },
+  "keywords": [
+    "typescript",
+    "reddit",
+    "api",
+    "wrapper"
+  ],
+  "author": "J. R. Swift",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/JamesxX/traw/issues"
+  },
+  "homepage": "https://github.com/JamesxX/traw#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.10",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "axios": "^0.25.0"
+  }
+}
