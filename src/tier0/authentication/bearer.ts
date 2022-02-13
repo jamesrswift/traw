@@ -6,4 +6,8 @@ export default class bearer_authentication extends authentication_strategy{
     ){
         super()
     }
+
+    public toString(): string{
+        return `Bearer: ${this.bearer}`
+    }
 }
