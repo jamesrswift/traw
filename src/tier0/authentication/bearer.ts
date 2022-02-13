@@ -8,6 +8,6 @@ export default class bearer_authentication extends authentication_strategy{
     }
 
     public toString(): string{
-        return `Bearer: ${this.bearer}`
+        return `Bearer ${this.bearer}`
     }
 }

@@ -1,11 +1,4 @@
-import axios from "axios";
-import { ExecOptionsWithStringEncoding } from "child_process";
-import bearer_authentication from "../../tier0/authentication/bearer";
-import userAgent from "../../tier0/useragent";
-
-export interface me_request {
-
-}
+import authenticated_requestor from "../authenticated_requestor";
 
 export interface me_response{
 
@@ -158,20 +151,7 @@ export interface me_response{
     }
 }
 
-export async function me( agent: userAgent, params: me_request, auth: bearer_authentication ) : Promise<me_response>{
-    const result = await axios({
-        method: 'get',
-        url: '/api/me.json',
-        baseURL: 'https://oauth.reddit.com/',
-
-        headers: {
-            'User-Agent': agent.toString(),
-            'Authorization': auth.toString()
-        },
-
-        params: {},
-    })
-
-    console.log(result)
+export async function me( requestor: authenticated_requestor) : Promise<me_response>{
+    const result = await requestor.get({url: '/api/me.json'})
     return <me_response>result.data
 }
