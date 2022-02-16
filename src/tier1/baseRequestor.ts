@@ -153,10 +153,10 @@ export class BaseRequestor {
                             resolve(length)
                         })
                     })
-                    config.data = requestBody
                     config.headers['content-length'] = contentLength
                     config.headers['content-type'] = `multipart/form-data; boundary=${requestBody.getBoundary()}`
                 }
+                config.data = requestBody
             } else if (config.form) {
                 let requestBody = new URLSearchParams()
                 Object.keys(config.form).forEach(key => requestBody.append(key, config.form![key]))
