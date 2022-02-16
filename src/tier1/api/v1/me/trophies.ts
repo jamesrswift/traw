@@ -1,4 +1,4 @@
-import authenticated_requestor from "../../../authenticated_requestor";
+import authenticated_requestor from "../../../baseRequestor";
 
 export interface trophies_response{
     kind: string,

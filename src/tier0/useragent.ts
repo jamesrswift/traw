@@ -6,7 +6,7 @@ export default class userAgent{
         public appID: string,
         public version: string,
         public username: string
-    ){
+    ) {
 
     }
 
