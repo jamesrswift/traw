@@ -1,1 +1,8 @@
-function dfgdfgdfgd(){}
+import BaseRequestor from "./tier1/baseRequestor";
+
+const r = new BaseRequestor({
+    client_id: '9wkmmc_voASdYsOlpVcEtg',
+    user_agent: 'TRAW:9wkmmc_voASdYsOlpVcEtg:v0.0.1dev (by /u/Mr_DJA)'
+})
+
+r.updateAccessToken().then(console.log)
