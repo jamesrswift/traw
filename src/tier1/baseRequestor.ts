@@ -22,10 +22,21 @@ export const grantTypes = {
     AUTHORIZATION_CODE: 'authorization_code'
 }
 
+export interface credentialsResponse {
+    access_token: string
+    expires_in: number
+    refresh_token: string
+    scope: string,
+    token_type: string,
+    error: string
+    error_description: string
+}
+
 export interface State {
     ratelimitRemaining: number
     ratelimitExpiration: number
     tokenExpiration: number
+    initialGrantType?: string
 }
 
 export interface Common {
@@ -77,15 +88,16 @@ export class BaseRequestor {
 
     private state: State = {
         ratelimitRemaining: Infinity,
-        ratelimitExpiration: 0,
-        tokenExpiration: 0
+        ratelimitExpiration: Infinity,
+        tokenExpiration: Infinity
     }
+    scope?: string[]
 
-    constructor(options: AppAuth)
-    constructor(options: ScriptAuth)
-    constructor(options: CodeAuth)
-    constructor(options: Common)
-    constructor(options: All) {
+    constructor(options?: AppAuth)
+    constructor(options?: ScriptAuth)
+    constructor(options?: CodeAuth)
+    constructor(options?: Common)
+    constructor(options: All = {}) {
         this.setOptions(options)
     }
 
@@ -105,17 +117,37 @@ export class BaseRequestor {
         this.debug = options.debug || false
         this.state = {
             ratelimitRemaining: Infinity,
-            ratelimitExpiration: 0,
-            tokenExpiration: 0
+            ratelimitExpiration: Infinity,
+            tokenExpiration: Infinity
         }
+        this.scope = undefined
     }
 
-    async updateAccessToken() {
-        if (
-            (!this.access_token || Date.now() > this.state.tokenExpiration)
-        ) {
+    async authenticatedRequest(config: AxiosRequestConfig) {
+        const token = await this.updateAccessToken()
+        const res = await this.axiosCreate({
+            baseURL: 'https://oauth.reddit.com',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'user-agent': this.user_agent!
+            },
+            params: {
+                raw_json: 1
+            }
+        }).request(config)
+        if (res.headers['x-ratelimit-remaining']) {
+            this.state.ratelimitRemaining = Number(res.headers['x-ratelimit-remaining'])
+            this.state.ratelimitExpiration = Date.now() + (Number(res.headers['x-ratelimit-reset']) * 1000)
+        }
+        return res
+    }
 
-            let form: AxiosRequestConfig['form']
+    request = this.authenticatedRequest
+
+    async updateAccessToken() {
+        if (!this.access_token || Date.now() > this.state.tokenExpiration) {
+
+            let form: AxiosRequestConfig['form'] = {}
 
             if (this.refresh_token) {
                 form = {
@@ -141,13 +173,32 @@ export class BaseRequestor {
                     device_id: this.device_id
                 }
             }
+
+            if (!this.state.initialGrantType) this.state.initialGrantType = form.grant_type
+
             const res = await this.credentialedRequest({
                 method: 'post',
                 url: 'api/v1/access_token',
                 form
             })
 
-            return res
+            const {
+                access_token,
+                refresh_token,
+                expires_in,
+                scope,
+                error,
+                error_description
+            }: credentialsResponse = res.data
+
+            if (error) throw new Error(error_description ? `${error} - ${error_description}` : error)
+
+            this.access_token = access_token
+            this.refresh_token = refresh_token
+            this.state.tokenExpiration = Date.now() + (expires_in * 1000)
+            this.scope = scope.split(' ')
+
+            return this.access_token
         }
         return this.access_token
     }
@@ -242,12 +293,12 @@ export class BaseRequestor {
         return result
     }*/
 
-    public get(config: AxiosRequestConfig) { config.method = "GET"; return axios(config) }
-    public head(config: AxiosRequestConfig) { config.method = "HEAD"; return axios(config) }
-    public post(config: AxiosRequestConfig) { config.method = "POST"; return axios(config) }
-    public put(config: AxiosRequestConfig) { config.method = "PUT"; return axios(config) }
-    public delete(config: AxiosRequestConfig) { config.method = "DELETE"; return axios(config) }
-    public patch(config: AxiosRequestConfig) { config.method = "PATCH"; return axios(config) }
+    public get(config: AxiosRequestConfig) { config.method = "GET"; return this.request(config) }
+    public head(config: AxiosRequestConfig) { config.method = "HEAD"; return this.request(config) }
+    public post(config: AxiosRequestConfig) { config.method = "POST"; return this.request(config) }
+    public put(config: AxiosRequestConfig) { config.method = "PUT"; return this.request(config) }
+    public delete(config: AxiosRequestConfig) { config.method = "DELETE"; return this.request(config) }
+    public patch(config: AxiosRequestConfig) { config.method = "PATCH"; return this.request(config) }
 }
 
 export default BaseRequestor
