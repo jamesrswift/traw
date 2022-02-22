@@ -1,4 +1,4 @@
-import authenticated_requestor from "../baseRequestor";
+import requestor from "../../tier0/requestors/baseRequestor";
 
 export interface blocked_response{
     kind: string,
@@ -12,7 +12,7 @@ export interface blocked_response{
     }
 }
 
-export async function friends( requestor: authenticated_requestor ) : Promise<blocked_response>{
+export async function friends( requestor: requestor ) : Promise<blocked_response>{
     const result = await requestor.get({url: '/prefs/blocked'})
     return <blocked_response>result.data
 }

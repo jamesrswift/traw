@@ -1,4 +1,4 @@
-import authenticated_requestor from "../baseRequestor";
+import requestor from "../../tier0/requestors/baseRequestor";
 
 export interface friends_response{
     kind: string,
@@ -12,7 +12,7 @@ export interface friends_response{
     }
 }
 
-export async function friends( requestor: authenticated_requestor ) : Promise<friends_response[]>{
+export async function friends( requestor: requestor ) : Promise<friends_response[]>{
     const result = await requestor.get({url: '/prefs/friends'})
     return <friends_response[]>result.data
 }

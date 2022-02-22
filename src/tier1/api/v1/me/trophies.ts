@@ -1,4 +1,4 @@
-import authenticated_requestor from "../../../baseRequestor";
+import requestor from "../../../../tier0/requestors/baseRequestor";
 
 export interface trophies_response{
     kind: string,
@@ -19,7 +19,7 @@ export interface trophies_response{
     }
 }
 
-export async function karma( requestor: authenticated_requestor ) : Promise<trophies_response>{
+export async function karma( requestor: requestor ) : Promise<trophies_response>{
     const result = await requestor.get({url: '/api/v1/me/trophies'})
     return <trophies_response>result.data
 }

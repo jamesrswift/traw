@@ -1,4 +1,4 @@
-import authenticated_requestor from "../../../baseRequestor";
+import requestor from "../../../../tier0/requestors/baseRequestor";
 
 export interface prefs_response{
     beta: boolean,
@@ -86,12 +86,12 @@ export interface prefs_response{
     show_location_based_recommendations: boolean
 }
 
-export async function prefs( requestor: authenticated_requestor ) : Promise<prefs_response>{
+export async function prefs( requestor: requestor ) : Promise<prefs_response>{
     const result = await requestor.get({url: '/api/v1/me/prefs'})
     return <prefs_response>result.data
 }
 
-export async function prefs_patch( requestor: authenticated_requestor, prefs: prefs_response) : Promise<void>{
+export async function prefs_patch( requestor: requestor, prefs: prefs_response) : Promise<void>{
     await requestor.patch({url: '/api/v1/me/prefs', data: prefs})
     return void 0
 }
