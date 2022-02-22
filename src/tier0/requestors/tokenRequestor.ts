@@ -30,7 +30,13 @@ export default class tokenRequestor extends baseRequestor{
     }
 
     async request(config: AxiosRequestConfig){
+
+        // Await rate limit reset if 0
+        await this.awaitRateLimit();
+
+        // Validate token
         this.token = await this.updateAccessToken();
+
         const res = await axiosCreate({
             baseURL: 'https://oauth.reddit.com',
             headers: {
@@ -42,10 +48,7 @@ export default class tokenRequestor extends baseRequestor{
             }
         }).request(config)
 
-        if (res.headers['x-ratelimit-remaining']) {
-            this.state.ratelimitRemaining = Number(res.headers['x-ratelimit-remaining'])
-            this.state.ratelimitExpiration = Date.now() + (Number(res.headers['x-ratelimit-reset']) * 1000)
-        }
+        this.handleRateLimitResponse(res)
 
         return res
     }

@@ -16,6 +16,7 @@ export const enum grantType{
 
 export interface State {
     ratelimitRemaining: number
+    ratelimitReset: number
     ratelimitExpiration: number
     tokenExpiration: number
     initialGrantType?: grantType
@@ -27,6 +28,7 @@ export default abstract class baseRequestor{
 
     protected state: State = {
         ratelimitRemaining: Infinity,
+        ratelimitReset: 0,
         ratelimitExpiration: Infinity,
         tokenExpiration: Infinity
     }
@@ -37,6 +39,20 @@ export default abstract class baseRequestor{
 
     async request(config: AxiosRequestConfig) : Promise<AxiosResponse<any, any>>{
         throw new NotImplemented()
+    }
+
+    async awaitRateLimit( ){
+        if (this.state.ratelimitRemaining < 1) {
+            await new Promise( r => setTimeout(r, this.state.ratelimitReset * 1000 ))
+        }
+    }
+
+    handleRateLimitResponse(respone: AxiosResponse){
+        if ( respone.headers['x-ratelimit-remaining']) {
+            this.state.ratelimitRemaining = Number(respone.headers['x-ratelimit-remaining'])
+            this.state.ratelimitReset = Number(respone.headers['x-ratelimit-reset'])
+            this.state.ratelimitExpiration = Date.now() + (this.state.ratelimitReset * 1000)
+        }
     }
 
     public get(config: AxiosRequestConfig) { config.method = "GET"; return this.request(config) }
