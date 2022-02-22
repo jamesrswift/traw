@@ -1,4 +1,4 @@
-import authenticated_requestor from "../baseRequestor";
+import requestor from "../../tier0/requestors/baseRequestor";
 
 export interface me_response{
 
@@ -151,7 +151,7 @@ export interface me_response{
     }
 }
 
-export async function me( requestor: authenticated_requestor) : Promise<me_response>{
+export async function me( requestor: requestor) : Promise<me_response>{
     const result = await requestor.get({url: '/api/me.json'})
     return <me_response>result.data
 }
