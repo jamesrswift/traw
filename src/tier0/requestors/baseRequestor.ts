@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { NotImplemented } from '../exceptions';
 import { AxiosRequestConfig } from '../http'
 import userAgent from '../useragent';
 
@@ -35,7 +36,7 @@ export default abstract class baseRequestor{
     }
 
     async request(config: AxiosRequestConfig) : Promise<AxiosResponse<any, any>>{
-        throw new Error("[TRAW] request not implemented on current requestor class")
+        throw new NotImplemented()
     }
 
     public get(config: AxiosRequestConfig) { config.method = "GET"; return this.request(config) }

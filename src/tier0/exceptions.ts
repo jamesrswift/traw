@@ -1,3 +1,16 @@
+import { credentialsResponse } from "./requestors/tokenRequestor"
+
+export class NotImplemented extends Error{
+    constructor(){
+        super("[TRAW] Attempted to call a function without implementation (possibly an internal baseclass?)")
+    }
+}
+
+export class updateAccessTokenError extends Error{
+    constructor( response: credentialsResponse){
+        super( response.error_description ? `${response.error} - ${response.error_description}` : response.error )
+    }
+}
 
 export class response_401 extends Error {
     constructor() {

@@ -4,6 +4,7 @@ import { axiosCreate, AxiosRequestConfig } from "../http";
 import userAgent from "../useragent";
 import credentialedRequestor from "./credentialedRequestor";
 import { util } from "chai";
+import { updateAccessTokenError } from "../exceptions";
 
 export interface credentialsResponse {
     access_token: string
@@ -70,14 +71,10 @@ export default class tokenRequestor extends baseRequestor{
         const form = this.createUpdateAccessTokenForm();
         // if (!this.state.initialGrantType) this.state.initialGrantType = form.grant_type
         const res = await this.credentialedRequestor.post({ url: 'api/v1/access_token', form })
-
         const parsedResponse: credentialsResponse = res.data
 
         if (parsedResponse.error){
-            // Separation of concerns: Create credentialsResponse error class to handle the logic below
-            console.log( form )
-            console.log( res )
-            throw new Error(parsedResponse.error_description ? `${parsedResponse.error} - ${parsedResponse.error_description}` : parsedResponse.error)
+            throw new updateAccessTokenError(parsedResponse)
         }
 
         this.token = new bearer_authentication( parsedResponse.access_token )
