@@ -1,43 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
-import URLSearchParams from './utils/URLSearchParams'
-import FormData from './utils/FormData'
-import isBrowser from './utils/isBrowser'
+import URLSearchParams from '../tier0/utils/URLSearchParams'
+import FormData from '../tier0/utils/FormData'
+import isBrowser from '../tier0/utils/isBrowser'
 
-declare module 'axios' {
-    export interface AxiosRequestConfig {
-        form?: {
-            [key: string]: string
-        }
-        formData?: {
-            [key: string]: any
-        }
-    }
-}
 
-export const grantTypes = {
-    CLIENT_CREDENTIALS: 'client_credentials',
-    INSTALLED_CLIENT: 'https://oauth.reddit.com/grants/installed_client',
-    REFRESH_TOKEN: 'refresh_token',
-    PASSWORD: 'password',
-    AUTHORIZATION_CODE: 'authorization_code'
-}
-
-export interface credentialsResponse {
-    access_token: string
-    expires_in: number
-    refresh_token: string
-    scope: string,
-    token_type: string,
-    error: string
-    error_description: string
-}
-
-export interface State {
-    ratelimitRemaining: number
-    ratelimitExpiration: number
-    tokenExpiration: number
-    initialGrantType?: string
-}
 
 export interface Common {
     redirect_uri?: string
@@ -217,37 +183,6 @@ export class BaseRequestor {
         return res
     }
 
-    axiosCreate(baseConfig: AxiosRequestConfig) {
-        const instance = axios.create(baseConfig)
-
-        instance.interceptors.request.use(async config => {
-            if (!config.headers) config.headers = {}
-            if (config.formData) {
-                let requestBody = new FormData()
-                Object.keys(config.formData).forEach(key => requestBody.append(key, config.formData![key]))
-                if (!isBrowser) {
-                    const contentLength: number = await new Promise((resolve, reject) => {
-                        requestBody.getLength((err, length) => {
-                            if (err) reject(err)
-                            resolve(length)
-                        })
-                    })
-                    config.headers['content-length'] = contentLength
-                    config.headers['content-type'] = `multipart/form-data; boundary=${requestBody.getBoundary()}`
-                }
-                config.data = requestBody
-            } else if (config.form) {
-                let requestBody = new URLSearchParams()
-                Object.keys(config.form).forEach(key => requestBody.append(key, config.form![key]))
-                config.data = requestBody.toString()
-                config.headers['content-type'] = 'application/x-www-form-urlencoded'
-            }
-            return config
-        })
-        
-        return instance
-    }
-
     /*constructor(auth: bearer_authentication, userAgent: userAgent, bDebug : boolean = false) {
         this.auth = auth;
         this.userAgent = userAgent;
@@ -293,12 +228,6 @@ export class BaseRequestor {
         return result
     }*/
 
-    public get(config: AxiosRequestConfig) { config.method = "GET"; return this.request(config) }
-    public head(config: AxiosRequestConfig) { config.method = "HEAD"; return this.request(config) }
-    public post(config: AxiosRequestConfig) { config.method = "POST"; return this.request(config) }
-    public put(config: AxiosRequestConfig) { config.method = "PUT"; return this.request(config) }
-    public delete(config: AxiosRequestConfig) { config.method = "DELETE"; return this.request(config) }
-    public patch(config: AxiosRequestConfig) { config.method = "PATCH"; return this.request(config) }
 }
 
 export default BaseRequestor
