@@ -1,7 +1,7 @@
 import { api_type } from "../../tier0/constants";
 import Listing from "../objects/Listing";
 import RedditUser from "../objects/RedditUser";
-import Subreddit from "../objects/subreddit";
+import Subreddit from "../objects/Subreddit";
 import { handleJsonErrors } from "../traw/helpers";
 import ReplyableContent from "./ReplyableContent";
 

@@ -1,4 +1,3 @@
-
 import Comment from "./Comment";
 import Listing, { ListingOptions } from "./Listing";
 import PrivateMessage from "./PrivateMessage";
@@ -9,6 +8,11 @@ import WikiPage, { WikiPageRevision } from "./WikiPage";
 // import ModmailConversation from "./ModmailConversation";
 import { RichTextFlair } from "../mixins/VoteableContent";
 import { AxiosResponse } from "axios";
+import { api_type } from "../../tier0/constants";
+import { handleJsonErrors } from "../traw/helpers";
+import { NotImplemented } from "../../tier0/exceptions";
+import { createReadStream } from "fs";
+import { SubmitLinkOptions, SubmitSelfPostOptions } from "../traw";
 
 export default interface Subreddit extends RedditContent<Subreddit> {
 	accept_followers: boolean; // Added 15/04/22
@@ -27,15 +31,15 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	allow_talks: boolean; // Added 15/04/22
 	allow_videogifs: boolean;
 	allow_videos: boolean;
-	banner_background_color: string; /** HEX color code */
-	banner_background_image: string; /** URL of the banner image used on desktop Reddit */
-	banner_img: string; /** URL of the banner image used on the mobile Reddit app */
+	banner_background_color: string /** HEX color code */;
+	banner_background_image: string /** URL of the banner image used on desktop Reddit */;
+	banner_img: string /** URL of the banner image used on the mobile Reddit app */;
 	banner_size: [number, number] | null;
 	can_assign_link_flair: boolean;
 	can_assign_user_flair: boolean;
 	collapse_deleted_comments: boolean;
 	comment_score_hide_mins: number;
-	community_icon: string;/** Image URL of the subreddit icon */
+	community_icon: string /** Image URL of the subreddit icon */;
 	community_reviewed: boolean; // Added 15/04/22
 	description_html: string;
 	description: string;
@@ -59,11 +63,13 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	link_flair_enabled: boolean;
 	link_flair_position: "" | "left" | "right";
 	mobile_banner_image: string; // Added 15/04/22; value : '' when tested
-	notification_level: string | null;/** Will be null if user is not subscribed to this subreddit */
+	notification_level:
+		| string
+		| null /** Will be null if user is not subscribed to this subreddit */;
 	original_content_tag_enabled: boolean; // Added 15/04/22
 	over18: boolean;
 	prediction_leaderboard_entry_type: string; // Added 15/04/22;  value : 'SUBREDDIT_HEADER' when tested
-	primary_color: string;/** HEX color code */
+	primary_color: string /** HEX color code */;
 	public_description_html: string;
 	public_description: string;
 	public_traffic: boolean;
@@ -108,16 +114,22 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 }
 
 export default class Subreddit extends RedditContent<Subreddit> {
-	public override get uri(): string{
+	public override get uri(): string {
 		return `r/${this.display_name}/about`;
 	}
 
-	protected override transformApiResponse(response: AxiosResponse<Subreddit, any>): Subreddit {
-
-		const payload = (<AxiosResponse<{
-			kind: 't5',
-			data: Subreddit;
-		}, any>><unknown>response).data.data;
+	protected override transformApiResponse(
+		response: AxiosResponse<Subreddit, any>
+	): Subreddit {
+		const payload = (<
+			AxiosResponse<
+				{
+					kind: "t5";
+					data: Subreddit;
+				},
+				any
+			>
+		>(<unknown>response)).data.data;
 
 		// Assignment
 		this.accept_followers = payload.accept_followers;
@@ -130,9 +142,11 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		this.allow_galleries = payload.allow_galleries;
 		this.allow_images = payload.allow_images;
 		this.allow_polls = payload.allow_polls;
-		this.allow_prediction_contributors = payload.allow_prediction_contributors;
+		this.allow_prediction_contributors =
+			payload.allow_prediction_contributors;
 		this.allow_predictions = payload.allow_predictions;
-		this.allow_predictions_tournament = payload.allow_predictions_tournament;
+		this.allow_predictions_tournament =
+			payload.allow_predictions_tournament;
 		this.allow_talks = payload.allow_talks;
 		this.allow_videogifs = payload.allow_videogifs;
 		this.allow_videos = payload.allow_videos;
@@ -150,7 +164,8 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		this.created_utc = payload.created_utc;
 		this.description = payload.description;
 		this.description_html = payload.description_html;
-		this.disable_contributor_requests = payload.disable_contributor_requests;
+		this.disable_contributor_requests =
+			payload.disable_contributor_requests;
 		this.display_name = payload.display_name;
 		this.display_name_prefixed = payload.display_name_prefixed;
 		this.emojis_custom_size = payload.emojis_custom_size;
@@ -173,9 +188,11 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		this.mobile_banner_image = payload.mobile_banner_image;
 		this.name = payload.name;
 		this.notification_level = payload.notification_level;
-		this.original_content_tag_enabled = payload.original_content_tag_enabled;
+		this.original_content_tag_enabled =
+			payload.original_content_tag_enabled;
 		this.over18 = payload.over18;
-		this.prediction_leaderboard_entry_type = payload.prediction_leaderboard_entry_type;
+		this.prediction_leaderboard_entry_type =
+			payload.prediction_leaderboard_entry_type;
 		this.primary_color = payload.primary_color;
 		this.public_description = payload.public_description;
 		this.public_description_html = payload.public_description_html;
@@ -221,145 +238,533 @@ export default class Subreddit extends RedditContent<Subreddit> {
 
 		return this;
 	}
+
+	public async acceptModeratorInvite(): Promise<this>{
+		const res = await this.post({
+			url: `r/${this.display_name}/api/accept_moderator_invite`,
+			form: {api_type}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
 	
-	/*acceptModeratorInvite(): Promise<this>;
-	addContributor(options: { name: string }): Promise<this>;
-	addWikiContributor(options: { name: string }): Promise<this>;
-	banUser(options: BanOptions): Promise<this>;
-	configureFlair(options: FlairConfig): Promise<this>;
-	createLinkFlairTemplate(options: FlairParams): Promise<this>;
-	createUserFlairTemplate(options: FlairParams): Promise<this>;
-	deleteAllLinkFlairTemplates(): Promise<this>;
-	deleteAllUserFlairTemplates(): Promise<this>;
-	deleteBanner(): Promise<this>;
-	deleteFlairTemplate(options: { flair_template_id: string }): Promise<this>;
-	deleteHeader(): Promise<this>;
-	deleteIcon(): Promise<this>;
-	deleteImage(options: { imageName: string }): Promise<this>;
-	deleteUserFlair(name: string): Promise<this>;
-	editSettings(options: SubredditSettings): Promise<this>;
-	getBannedUsers(
+	public async addContributor(name: string): Promise<this>{
+		return this.#friend({name, type: 'contributor'});
+	}
+
+	public async addWikiContributor(name: string): Promise<this>{
+		return this.#friend({name, type: 'wikicontributor'});
+	}
+
+	public async banUser(options: BanOptions): Promise<this>{
+		return this.#friend({
+			name: options.name, 
+			ban_message: options.banMessage,
+			ban_reason: options.banReason,
+			duration: options.duration,
+			note: options.banNote,
+			type: 'banned'
+		});
+	}
+	public async configureFlair(options: FlairConfig): Promise<this>{
+		await this.post({url: `r/${this.display_name}/api/flairconfig`, form: {
+			api_type,
+			flair_enabled: options.userFlairEnabled,
+			flair_position: options.userFlairPosition,
+			flair_self_assign_enabled: options.userFlairSelfAssignEnabled,
+			link_flair_position: options.linkFlairPosition,
+			link_flair_self_assign_enabled: options.linkFlairSelfAssignEnabled
+		}});
+		return this;
+	}
+
+	public async createLinkFlairTemplate(options: FlairParams): Promise<this>{
+		return this.#createFlairTemplate({...options, flair_type: 'LINK_FLAIR'});
+	}
+	
+	public async createUserFlairTemplate(options: FlairParams): Promise<this>{
+		return this.#createFlairTemplate({...options, flair_type: 'USER_FLAIR'});
+	}
+
+	public async deleteAllLinkFlairTemplates(): Promise<this>{
+		return this.#deleteFlairTemplates('LINK_FLAIR');
+	}
+
+	public async deleteAllUserFlairTemplates(): Promise<this>{
+		return this.#deleteFlairTemplates('USER_FLAIR');
+	}
+
+	public async deleteBanner(): Promise<this>{
+		const res = await this.post({url: `r/${this.display_name}/api/delete_sr_banner`, form: {api_type}});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async deleteFlairTemplate(flair_template_id: string): Promise<this>{
+		await this.post({
+		  url: `r/${this.display_name}/api/deleteflairtemplate`,
+		  form: {api_type, flair_template_id}
+		});
+		return this;
+	  }
+
+	public async deleteHeader(): Promise<this>{
+		const res = await this.post({url: `r/${this.display_name}/api/delete_sr_header`, form: {api_type}});
+		handleJsonErrors(res);
+		return this;
+	  }
+
+	public async deleteIcon(): Promise<this>{
+		const res = await this.post({url: `r/${this.display_name}/api/delete_sr_icon`, form: {api_type}});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async deleteImage(img_name: string ): Promise<this>{
+		const res = await this.post({
+		  url: `r/${this.display_name}/api/delete_sr_img`,
+		  form: {api_type, img_name}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async deleteUserFlair(name: string): Promise<this>{
+		await this.post({url: `r/${this.display_name}/api/deleteflair`, form: {api_type, name}});
+		return this;
+	}
+
+	public async editSettings(options: SubredditSettings): Promise<this>{
+		const currentValues = await this.getSettings();
+		const name = (await this.fetch()).name;
+		/*await this.traw._createOrEditSubreddit({
+		  ...renameKey(currentValues, 'subreddit_type', 'type'),
+		  ...options,
+		  sr: name
+		});*/
+		throw new NotImplemented();
+		return this;
+	}
+
+	public async getBannedUsers(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<BannedUser>>;
-	getContributors(
+	): Promise<Listing<BannedUser>>{
+		return this.getListing({uri: `r/${this.display_name}/about/banned`, qs: renameKey(options, 'name', 'user')});
+	}
+
+	public async getContributors(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<Contributor>>;
-	getControversial(
+	): Promise<Listing<Contributor>>{
+		return this.getListing({uri: `r/${this.display_name}/about/contributors`, qs: renameKey(options, 'name', 'user')});
+	}
+
+	public async getControversial(
 		options?: ListingOptions & { time?: string }
-	): Promise<Listing<Submission>>;
-	getEdited(
+	): Promise<Listing<Submission>>{
+		return this.traw.getControversial(this.display_name, options);
+	}
+
+	public async getEdited(
 		options?: ListingOptions & { only?: "links" | "comments" }
-	): Promise<Listing<Submission | Comment>>;
-	getHot(options?: ListingOptions): Promise<Listing<Submission>>;
-	getLinkFlairTemplates(linkId?: string): Promise<FlairTemplate[]>;
-	getModerationLog(
+	): Promise<Listing<Submission | Comment>> {
+		return this.getListing({uri: `r/${this.display_name}/about/edited`, qs: options});
+	}
+
+	public async getHot(options?: ListingOptions): Promise<Listing<Submission>>{
+		return this.traw.getHot(this.display_name, options);
+	}
+
+	public async getLinkFlairTemplates(linkId?: string): Promise<FlairTemplate[]>{
+		const options = linkId ? {link: linkId} : {is_newlink: true};
+		const res = await this.#getFlairOptions(options);
+		return res.choices;
+	}
+
+	public async getModerationLog(
 		opts?: ListingOptions & { mods?: string[]; type?: ModActionType }
-	): Promise<Listing<ModAction>>;
-	getModerators(options?: ListingOptions & { name?: string }): RedditUser[];
-	getModmail(options?: ListingOptions): Promise<Listing<PrivateMessage>>;
-	getNewModmailConversations(
+	): Promise<Listing<ModAction>>{
+		const parsedOptions = omit({...options, mod: options.mods && options.mods.join(',')}, 'mods');
+		return this.getListing({uri: `r/${this.display_name}/about/log`, qs: parsedOptions});
+	}
+
+	public async getModerators(options?: ListingOptions & { name?: string }): RedditUser[]{
+		return this.get({url: `r/${this.display_name}/about/moderators`, params: {user: name}});
+	}
+
+	public async getModmail(options?: ListingOptions): Promise<Listing<PrivateMessage>> {
+		return this.getListing({uri: `r/${this.display_name}/about/message/moderator`, qs: options});
+	}
+
+	public async getNewModmailConversations(
 		options?: ListingOptions
-	): Promise<Listing<ModmailConversation>>;
-	getModqueue(
+	): Promise<Listing<ModmailConversation>>{
+		return this.traw.getNewModmailConversations({...options, entity: this.display_name});
+	}
+
+	public async getModqueue(
 		options?: ListingOptions & { only?: "links" | "comments" }
-	): Promise<Listing<Submission | Comment>>;
-	getMutedUsers(
+	): Promise<Listing<Submission | Comment>>{
+		return this.getListing({uri: `r/${this.display_name}/about/modqueue`, qs: options});
+	}
+
+	public async getMutedUsers(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<MutedUser>>;
-	getMyFlair(): Promise<FlairTemplate>;
-	getNew(options?: ListingOptions): Promise<Listing<Submission>>;
-	getNewComments(options?: ListingOptions): Promise<Listing<Comment>>;
-	getRandomSubmission(): Promise<Submission>;
-	getRecommendedSubreddits(options?: {
+	): Promise<Listing<MutedUser>>{
+		return this.getListing({uri: `r/${this.display_name}/about/muted`, qs: renameKey(options, 'name', 'user')});
+	}
+
+	public async getMyFlair(): Promise<FlairTemplate>{
+		return (await this.#getFlairOptions()).current;
+	}
+
+	public async getNew(options?: ListingOptions): Promise<Listing<Submission>> {
+		return this.traw.getNew(this.display_name, options);
+	}
+
+	public async getNewComments(options?: ListingOptions): Promise<Listing<Comment>>{
+		return this.traw.getNewComments(this.display_name, options);
+	}
+
+	public async getRandomSubmission(): Promise<Submission>{
+		return this.traw.getRandomSubmission(this.display_name);
+	}
+	public async getRecommendedSubreddits(options?: {
 		omit?: string[];
-	}): Promise<Subreddit[]>;
-	getReports(
+	}): Promise<Subreddit[]>{
+		const toOmit = options.omit && options.omit.join(',');
+		const names = await this._get({url: `api/recommend/sr/${this.display_name}`, params: {omit: toOmit}});
+		return map(names, 'sr_name');
+	}
+	
+	public async getReports(
 		options?: ListingOptions & { only?: "links" | "comments" }
-	): Promise<Listing<Submission | Comment>>;
-	getRising(options?: ListingOptions): Promise<Listing<Submission>>;
-	getRules(): Promise<{ rules: Rule[]; site_rules: string[] }>;
-	getSettings(): Promise<SubredditSettings>;
-	getSpam(
+	): Promise<Listing<Submission | Comment>>{
+		return this.getListing({uri: `r/${this.display_name}/about/reports`, qs: options});
+	}
+
+	public async getRising(options?: ListingOptions): Promise<Listing<Submission>>{
+		return this.traw.getRising(this.display_name, options);
+	}
+
+	public async getRules(): Promise<{ rules: Rule[]; site_rules: string[] }>{
+		return this.get({url: `r/${this.display_name}/about/rules`});
+	}
+
+	public async getSettings(): Promise<SubredditSettings>{
+		return this.get({url: `r/${this.display_name}/about/edit`});
+	}
+
+	public async getSpam(
 		options?: ListingOptions & { only?: "links" | "comments" }
-	): Promise<Listing<Submission | Comment>>;
-	getSticky(options?: { num?: number }): Promise<Submission>;
-	getStylesheet(): Promise<string>;
-	getSubmitText(): Promise<string>;
-	getTop(
+	): Promise<Listing<Submission | Comment>>{
+		return this.getListing({uri: `r/${this.display_name}/about/spam`, qs: options});
+	}
+
+	public async getSticky(num?: number ): Promise<Submission>{
+		return this.get({url: `r/${this.display_name}/about/sticky`, params: {num}});
+	}
+
+	public async getStylesheet(): Promise<string>{
+		return this.get({url: `r/${this.display_name}/stylesheet`, json: false});
+	}
+
+	public async getSubmitText(): Promise<string> {
+		const res = await this.get({url: `r/${this.display_name}/api/submit_text`});
+		return res.submit_text;
+	}
+
+	public async getTop(
 		options?: ListingOptions & { time?: Timespan }
-	): Promise<Listing<Submission>>;
-	getUnmoderated(
+	): Promise<Listing<Submission>>{
+		return this.traw.getTop(this.display_name, options);
+	}
+
+	public async getUnmoderated(
 		options?: ListingOptions & { only?: "links" | "comments" }
-	): Promise<Listing<Submission | Comment>>;
-	getUserFlair(name: string): Promise<FlairTemplate>;
-	getUserFlairList(
+	): Promise<Listing<Submission | Comment>>{
+		return this.getListing({uri: `r/${this.display_name}/about/unmoderated`, qs: options});
+	}
+
+	public async getUserFlair(name: string): Promise<FlairTemplate> {
+		const res = await this.#getFlairOptions({name});
+		return res.current;
+	}
+
+	public async getUserFlairList(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<UserFlair>>;
-	getUserFlairTemplates(): Promise<FlairTemplate[]>;
-	getWikiBannedUsers(
+	): Promise<Listing<UserFlair>>{
+		return this.getListing({uri: `r/${this.display_name}/api/flairlist`, qs: options, _transform: (response : any)=> {
+		  /**
+		   * For unknown reasons, responses from the api/flairlist endpoint are formatted differently than responses from all other
+		   * Listing endpoints. Most Listing endpoints return an object with a `children` property containing the Listing's children,
+		   * and `after` and `before` properties corresponding to the `after` and `before` querystring parameters that a client should
+		   * use in the next request. However, the api/flairlist endpoint returns an object with a `users` property containing the
+		   * Listing's children, and `next` and `prev` properties corresponding to the `after` and `before` querystring parameters. As
+		   * far as I can tell, there's no actual reason for this difference. >_>
+		   */
+		  response.after = response.next || null;
+		  response.before = response.prev || null;
+		  response.children = response.users;
+		  return new Listing<UserFlair>(response, this.traw);
+		}});
+	}
+
+	public async getUserFlairTemplates(): Promise<FlairTemplate[]>{
+		const res = await this.#getFlairOptions();
+		return res.choices;
+	}
+
+	public async getWikiBannedUsers(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<BannedUser>>;
-	getWikiContributors(
+	): Promise<Listing<BannedUser>>{
+		return this.getListing({uri: `r/${this.display_name}/about/wikibanned`, qs: renameKey(options, 'name', 'user')});
+	}
+
+	public async getWikiContributors(
 		options?: ListingOptions & { name?: string }
-	): Promise<Listing<Contributor>>;
-	getWikiPage(name: string): WikiPage;
-	getWikiPages(): Promise<WikiPage[]>;
-	getWikiRevisions(
+	): Promise<Listing<Contributor>>{
+		return this.getListing({uri: `r/${this.display_name}/about/wikicontributors`, qs: renameKey(options, 'name', 'user')});
+	}
+
+	public getWikiPage(title: string): WikiPage{
+		return new WikiPage( {subreddit: this, title}, this.traw);
+	}
+	
+	public async getWikiPages(): Promise<WikiPage[]>{
+		const res = await this.get({url: `r/${this.display_name}/wiki/pages`});
+		return res.map(title => this.getWikiPage(title));
+	}
+
+	public async getWikiRevisions(
 		options?: ListingOptions
-	): Promise<Listing<WikiPageRevision>>;
-	hideMyFlair(): Promise<this>;
-	inviteModerator(options: {
-		name: string;
-		permissions?: ModeratorPermission[];
-	}): Promise<this>;
-	leaveContributor(): Promise<this>;
-	leaveModerator(): Promise<this>;
-	muteUser(options: { name: string }): Promise<this>;
-	removeContributor(options: { name: string }): Promise<this>;
-	removeModerator(options: { name: string }): Promise<this>;
-	removeWikiContributor(options: { name: string }): Promise<this>;
-	revokeModeratorInvite(options: { name: string }): Promise<this>;
-	search(options: BaseSearchOptions): Promise<Listing<Submission>>;
-	selectMyFlair(options: {
+	): Promise<Listing<WikiPageRevision>>{
+		return this.getListing({uri: `r/${this.display_name}/wiki/revisions`, qs: options});
+	}
+
+	public async hideMyFlair(): Promise<this>{
+		return this.#setMyFlairVisibility(false);
+	}
+
+	public async inviteModerator(
+		name: string,
+		permissions?: ModeratorPermission[]
+	): Promise<this>{
+		return this.#friend({name, permissions: formatModPermissions(permissions), type: 'moderator_invite'});
+	}
+
+	public async leaveContributor(): Promise<this>{
+		const name = (await this.fetch()).name;
+		const res = await this.post({url: 'api/leavecontributor', form: {id: name}});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async leaveModerator(): Promise<this>{
+		const name = (await this.fetch()).name;
+		const res = await this.post({url: 'api/leavemoderator', form: {id: name}});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async muteUser(name: string ): Promise<this>{
+		return this.#friend({name, type: 'muted'});
+	}
+
+	public async removeContributor(name: string): Promise<this>{
+		return this.#unfriend({name, type: 'contributor'});
+	}
+
+	public async removeModerator(name: string): Promise<this>{
+		return this.#unfriend({name, type: 'moderator'});
+	}
+	
+	public async removeWikiContributor(name: string): Promise<this> {
+		return this.#unfriend({name, type: 'wikicontributor'});
+	}
+
+	public async revokeModeratorInvite(name: string): Promise<this>{
+		return this.#unfriend({name, type: 'moderator_invite'});
+	}
+
+	public async search(options: BaseSearchOptions): Promise<Listing<Submission>>{
+		return this.traw.search({...options, subreddit: this, restrictSr: true});
+	}
+
+	public async selectMyFlair(options: {
 		flair_template_id: string;
 		text?: string;
-	}): Promise<this>;
-	setModeratorPermissions(options: {
-		name: string;
-		permissions: ModeratorPermission;
-	}): Promise<this>;
-	setMultipleUserFlairs(
+	}): Promise<this>{
+		const name = await this.traw._getMyName();
+		await this.traw._selectFlair({...options, subredditName: this.display_name, name});
+		return this;
+	}
+	public async setModeratorPermissions(
+		name: string,
+		permissions: ModeratorPermission
+	): Promise<this>{
+		const res = await this.post({
+		  url: `r/${this.display_name}/api/setpermissions`,
+		  form: {api_type, name, permissions: formatModPermissions(permissions), type: 'moderator'}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async setMultipleUserFlairs(
 		flairs: Array<{
 			name: string;
 			text: string;
 			cssClass: string;
 		}>
-	): Promise<this>;
-	showMyFlair(): Promise<this>;
-	submitLink(options: SubmitLinkOptions): Promise<Submission>;
-	submitSelfpost(options: SubmitSelfPostOptions): Promise<Submission>;
-	subscribe(): Promise<this>;
-	unbanUser(options: { name: string }): Promise<this>;
-	unmuteUser(options: { name: string }): Promise<this>;
-	unsubscribe(): Promise<this>;
-	unwikibanUser(options: { name: string }): Promise<this>;
-	updateStylesheet(options: { css: string; reason?: string }): Promise<this>;
-	uploadBannerImage(options: ImageUploadOptions): Promise<this>;
-	uploadHeaderImage(options: ImageUploadOptions): Promise<this>;
-	uploadIcon(options: ImageUploadOptions): Promise<this>;
-	uploadStylesheetImage(
+	): Promise<this>{
+		throw new NotImplemented();
+	}
+
+	public async showMyFlair(): Promise<this>{
+		return this.#setMyFlairVisibility(true);
+	}
+
+	public async submitLink(options: SubmitLinkOptions): Promise<Submission>{
+		return this.traw.submitLink({...options, subredditName: this.display_name});
+	}
+
+	public async submitSelfpost(options: SubmitSelfPostOptions): Promise<Submission>{
+		return this.traw.submitSelfpost({...options, subredditName: this.display_name});
+	}
+
+	public async subscribe(): Promise<this>{
+		return this.#setSubscribed(true);
+	}
+
+	public async unbanUser(name: string): Promise<this>{
+		return this.#unfriend({name, type: 'banned'});
+	}
+
+	public async unmuteUser(name: string): Promise<this>{
+		return this.#unfriend({name, type: 'muted'});
+	}
+	
+	public async unsubscribe(): Promise<this>{
+		return this.#setSubscribed(false);
+	}
+
+	public async unwikibanUser( name: string ): Promise<this>{
+		return this.#unfriend({name, type: 'wikibanned'});
+	}
+
+	public async updateStylesheet( css: string, reason?: string ): Promise<this>{
+		const res = await this.post({
+			url: `r/${this.display_name}/api/subreddit_stylesheet`,
+			form: {api_type, op: 'save', reason, stylesheet_contents: css}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	public async uploadBannerImage(options: ImageUploadOptions): Promise<this> {
+		return this.#uploadSrImg({file: options.file, imageType: options.imageType, upload_type: 'banner'});
+	}
+
+	public async uploadHeaderImage(options: ImageUploadOptions): Promise<this>{
+		return this.#uploadSrImg({file: options.file, imageType: options.imageType, upload_type: 'header'});
+	}
+
+	public async uploadIcon(options: ImageUploadOptions): Promise<this>{
+		return this.#uploadSrImg({file: options.file, imageType: options.imageType, upload_type: 'icon'});
+	}
+
+	public async uploadStylesheetImage(
 		options: ImageUploadOptions & { name: string }
-	): Promise<this>;
-	wikibanUser(options: { name: string }): Promise<this>;*/
+	): Promise<this>{
+		return this.#uploadSrImg({file: options.file, imageType: options.imageType, upload_type: 'img'});
+	}
+
+	public async wikibanUser(name: string): Promise<this>{
+		return this.#friend({name, type: 'wikibanned'});
+	}
+
+	/*
+	 * Private declarations
+	 */
+
+	async #friend(options: any) : Promise<this>{
+		const res = await this.post({
+			url: `r/${this.display_name}/api/friend`,
+			form: {...options, api_type}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	async #unfriend(options: any) : Promise<this>{
+		const res = await this.post({
+			url: `r/${this.display_name}/api/unfriend`,
+			form: {...options, api_type}
+		});
+		handleJsonErrors(res);
+		return this;
+	}
+
+	async #setSubscribed(status: boolean): Promise<this>{
+		await this.post({
+			url: 'api/subscribe',
+			form: {
+				action: status ? 'sub' : 'unsub',
+				sr_name: this.display_name
+			}
+		})
+		return this;
+	}
+
+	async #uploadSrImg({name, file, upload_type, imageType}:{
+		name?: string, file: string | NodeJS.ReadableStream,
+		imageType?: string, upload_type: string
+	}){
+		const parsedFile = typeof file === 'string' ? createReadStream(file) : file;
+		const result = await this.post({
+			url: `r/${this.display_name}/api/upload_sr_img`,
+			formData: {name, upload_type, img_type: imageType, file: parsedFile}
+		});
+		handleJsonErrors(result);
+		return this;
+	}
+
+	async #setMyFlairVisibility (flair_enabled: boolean) {
+		await this.post({url: `r/${this.display_name}/api/setflairenabled`, form: {api_type, flair_enabled}});
+		return this;
+	}
+
+	async #createFlairTemplate ({
+		text, css_class, flair_type, text_editable = false} : {
+			text: string, css_class?: string, flair_type: string, text_editable?: boolean
+		}) {
+		await this.post({
+			url: `r/${this.display_name}/api/flairtemplate`,
+			form: {api_type, text, css_class, flair_type, text_editable}
+		});
+		return this;
+	}
+
+	async #deleteFlairTemplates (flair_type: string) {
+		await this.post({url: `r/${this.display_name}/api/clearflairtemplates`, form: {api_type, flair_type}});
+		return this;
+	}
 }
 
-export type Sort = 'confidence' | 'top' | 'new' | 'controversial' | 'old' | 'random' | 'qa';
+export type Sort =
+	| "confidence"
+	| "top"
+	| "new"
+	| "controversial"
+	| "old"
+	| "random"
+	| "qa";
 
 // this is per-flair
 interface FlairParams {
 	text: string;
-	cssClass?: string;
-	textEditable?: boolean;
+	css_class?: string;
+	text_editable?: boolean;
 }
 
 // this is for the entire subreddit
@@ -437,6 +842,7 @@ export interface SubredditSettings {
 interface ImageUploadOptions {
 	file: string | NodeJS.ReadableStream;
 	imageType?: string;
+	name?: string
 }
 
 interface Rule {

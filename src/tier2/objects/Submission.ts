@@ -189,18 +189,18 @@ export default class Submission extends VoteableContent<Submission> {
 		return this;
 	}
 
-	/*public async assignFlair(options: {
+	public async assignFlair(options: {
 		text: string;
 		cssClass: string;
 	}): Promise<this> {
 		await this.fetch();
-		await this.traw._assignFlair({
+		await this.traw.assignFlair({
 			...options,
 			link: this.name,
 			subredditName: this.subreddit.display_name,
 		});
 		return this;
-	}*/
+	}
 
 	public async disableContestMode(): Promise<this> {
 		return this._setContestModeEnabled(false);
@@ -240,19 +240,19 @@ export default class Submission extends VoteableContent<Submission> {
 		return comment;
 	}
 
-	/*public async getDuplicates(
+	public async getDuplicates(
 		options?: ListingOptions
 	): Promise<Listing<Submission>> {
 		return this.getListing({
 			uri: `duplicates/${this.name.slice(3)}`,
 			qs: options,
 		});
-	}*/
+	}
 
-	/*public async getLinkFlairTemplates(): Promise<FlairTemplate[]> {
+	public async getLinkFlairTemplates(): Promise<FlairTemplate[]> {
 		await this.fetch();
 		return this.subreddit.getLinkFlairTemplates(this.name);
-	}*/
+	}
 
 	/* @deprecated */
 	/*public async getRelated(options?: ListingOptions): Promise<Submission> {
@@ -296,18 +296,18 @@ export default class Submission extends VoteableContent<Submission> {
 		return this;
 	}
 
-	/*public async selectFlair(options: {
+	public async selectFlair(options: {
 		flair_template_id: string;
 		text?: string;
 	}): Promise<this> {
 		await this.fetch();
-		await this._r._selectFlair({
+		await this.traw.selectFlair({
 			...options,
 			link: this.name,
 			subredditName: this.subreddit.display_name,
 		});
 		return this;
-	}*/
+	}
 
 	public async setSuggestedSort(sort: Sort): Promise<this> {
 		await this.post({
@@ -347,10 +347,10 @@ export default class Submission extends VoteableContent<Submission> {
 		return this;
 	}
 
-	/*public async submitCrosspost(options: any): Promise<this> {
+	public async submitCrosspost(options: any): Promise<this> {
 		await this.traw.submitCrosspost({ ...options, originalPost: this });
 		return this;
-	}*/
+	}
 }
 
 export interface ImagePreviewSource {

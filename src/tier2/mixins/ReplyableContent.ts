@@ -1,6 +1,6 @@
 import { api_type } from "../../tier0/constants";
 import { NotImplemented } from "../../tier0/exceptions";
-import { Sort } from "../objects/subreddit";
+import { Sort } from "../objects/Subreddit";
 import RedditContent from "./RedditContent";
 
 export default interface ReplyableContent<

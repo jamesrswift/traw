@@ -1,6 +1,7 @@
 import traw from "../traw"
 import { NotImplemented } from "../../tier0/exceptions";
 import { AxiosResponse } from "axios";
+import Listing from "../objects/Listing";
 
 export default interface RedditContent<Type extends RedditContent<Type>>{
     created_utc: number;
@@ -9,7 +10,7 @@ export default interface RedditContent<Type extends RedditContent<Type>>{
     name: string;
 }
 
-export default abstract class RedditContent<Type extends RedditContent<Type>> {
+export default abstract class RedditContent<Type extends RedditContent<Type>>{
 
     protected _fetch?: Type;
 
@@ -56,8 +57,8 @@ export default abstract class RedditContent<Type extends RedditContent<Type>> {
         throw new NotImplemented();
     }
     
-    public getListing(){
-        throw new NotImplemented();
+    public async getListing<Type>(options: any) : Promise<Listing<Type>>{
+        return await this.traw.getListing<Type>(options)
     }
 
     public get uri () : string {
