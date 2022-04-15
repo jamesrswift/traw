@@ -249,10 +249,10 @@ export default class Submission extends VoteableContent<Submission> {
 		});
 	}*/
 
-	public async getLinkFlairTemplates(): Promise<FlairTemplate[]> {
+	/*public async getLinkFlairTemplates(): Promise<FlairTemplate[]> {
 		await this.fetch();
 		return this.subreddit.getLinkFlairTemplates(this.name);
-	}
+	}*/
 
 	/* @deprecated */
 	/*public async getRelated(options?: ListingOptions): Promise<Submission> {

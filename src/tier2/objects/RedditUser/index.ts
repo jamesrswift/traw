@@ -21,7 +21,7 @@ export default interface RedditUser extends RedditContent<RedditUser>{
 }
 
 export default class RedditUser extends RedditContent<RedditUser>{
-    public async assignFlair(options: any): Promise<this>;
+    /*public async assignFlair(options: any): Promise<this>;
     public async friend(options: any): Promise<this>;
     public async getComments(options?: any): Promise<Listing<Comment>>;
     public async getDownvotedContent(options?: any): Promise<Listing<Comment | Submission>>;
@@ -36,5 +36,5 @@ export default class RedditUser extends RedditContent<RedditUser>{
     public async getTrophies(): Promise<any>;
     public async getUpvotedContent(options?: any): Promise<Listing<Comment | Submission>>;
     public async giveGold(months: string): Promise<any>;
-    public async unfriend(): Promise<any>;
+    public async unfriend(): Promise<any>;*/
 }

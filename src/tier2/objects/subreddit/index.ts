@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { api_type } from "../../../tier0/constants";
 import RedditContent from "../../mixins/RedditContent";
+import { RichTextFlair } from "../../mixins/VoteableContent";
 import { handleJsonErrors } from "../../traw/helpers";
 import Listing, { ListingOptions } from "../Listing";
 import RedditUser from "../RedditUser";
@@ -109,7 +110,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		return this;
 	}
 
-    public async configureFlair(options: FlairConfig): Promise<this>;
+    /*public async configureFlair(options: FlairConfig): Promise<this>;
     public async createLinkFlairTemplate(options: FlairParams): Promise<this>;
     public async createUserFlairTemplate(options: FlairParams): Promise<this>;
     public async deleteAllLinkFlairTemplates(): Promise<this>;
@@ -186,7 +187,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
     public async uploadHeaderImage(options: ImageUploadOptions): Promise<this>;
     public async uploadIcon(options: ImageUploadOptions): Promise<this>;
     public async uploadStylesheetImage(options: ImageUploadOptions & { name: string; }): Promise<this>;
-    public async wikibanUser(options: { name: string; }): Promise<this>;
+    public async wikibanUser(options: { name: string; }): Promise<this>;*/
 
 }
 
