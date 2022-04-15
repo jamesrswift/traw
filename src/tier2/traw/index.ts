@@ -1,13 +1,15 @@
 import baseRequestor from "../../tier0/requestors/baseRequestor";
 import RedditUser from "../objects/RedditUser";
-import Subreddit, { Sort } from "../objects/Subreddit";
+import Subreddit, { Sort, SubredditSettings } from "../objects/Subreddit";
 import Comment from "../objects/Comment";
 import PrivateMessage from "../objects/PrivateMessage";
 import { addFullnamePrefix } from "./helpers";
 import RedditOwnUser from "../objects/RedditUser/RedditOwnUser";
 import { api_type, MAX_LISTING_ITEMS } from "../../tier0/constants";
-import Listing from "../objects/Listing";
+import Listing, { ListingOptions, SortedListingOptions } from "../objects/Listing";
 import { NotImplemented } from "../../tier0/exceptions";
+import Submission from "../objects/Submission";
+import LiveThread, { LiveThreadSettings } from "../objects/LiveThread";
 
 export default interface traw {
     _ownUserInfo?: RedditOwnUser;
@@ -26,91 +28,285 @@ export default class traw{
     public post( options: any ){ return this.requestor.post(options) }
     public put( options: any ){ return this.requestor.put(options) }
 
-    /*public async checkCaptchaRequirement(): Promise<boolean>{
-        
-        // @ts-ignore
-        return this.get({url: 'api/needs_captcha'});
-    }*/
+    public async checkCaptchaRequirement(): Promise<boolean>{
+        throw new NotImplemented()
+    }
 
-    /*public async checkUsernameAvailability(name: string): Promise<boolean> {
-        // The oauth endpoint listed in reddit's documentation doesn't actually work, so just send an unauthenticated request.
-        // @ts-ignore
-        return this.get({
-            baseURL: "https://www.reddit.com/",
-            url: 'api/username_available.json', 
-            params: {user: name}
-        });
-      }*/
+    public async checkUsernameAvailability(name: string): Promise<boolean> {
+        throw new NotImplemented()
+    }
     
-    /*public async composeMessage(options: Snoowrap.ComposeMessageParams): Promise<any>;
-    public async config(opts?: Snoowrap.ConfigOptions): Snoowrap.ConfigOptions;
-    public async createLivethread(options: LiveThreadSettings): Promise<_LiveThread>;
-    public async createMultireddit(options: MultiRedditProperties & { name: string; subreddits: _Subreddit[] | string[]}): Promise<_MultiReddit>;
-    public async createSubreddit(options: SubredditSettings): Promise<_Subreddit>;
-    public async credentialedClientRequest(options?: RequestOptions): Promise<any>;
-    public async getBlockedUsers(): Promise<_RedditUser[]>;
-    public async getCaptchaImage(identifier: string): Promise<string>;
-    public async getComment(commentId: string): _Comment;
-    public async getContributorSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getControversial(subredditName?: string, options?: SortedListingOptions): Promise<_Listing<_Submission>>;
-    public async getDefaultSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getFriends(): Promise<_RedditUser[]>;
-    public async getGoldSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getHot(subredditName?: string, options?: ListingOptions): Promise<_Listing<_Submission>>;
-    public async getBest(options?: ListingOptions): Promise<_Listing<_Submission>>;
-    public async getInbox(options?: { filter?: string }): Promise<_Listing<_PrivateMessage | _Comment>>;
-    public async getKarma(): Promise<Array<{ sr: _Subreddit; comment_karma: number; link_karma: number; }>>;
-    public async getLivethread(threadId: string): _LiveThread;
-    public async getMe(): _RedditUser;
-    public async getMessage(messageId: string): _PrivateMessage;
-    public async getModeratedSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getModmail(options?: ListingOptions): Promise<_Listing<_PrivateMessage>>;
-    public async getMyMultireddits(): Promise<_MultiReddit[]>;
-    public async getMyTrophies(): Promise<Snoowrap.Trophy[]>;
-    public async getNew(subredditName?: string, options?: ListingOptions): Promise<_Listing<_Submission>>;
-    public async getNewCaptchaIdentifier(): Promise<string>;
-    public async getNewComments(subredditName?: string, options?: ListingOptions): Promise<_Listing<_Comment>>;
-    public async getContentByIds(ids: Array<_Submission | _Comment | string>) : Promise<_Listing<_Submission | _Comment>>;
-    public async getNewModmailConversations(options?: ListingOptions & { entity?: string }): Promise<_Listing<_ModmailConversation>>;
-    public async createModmailDiscussion(options: { body: string, subject: string, srName: string }): Promise<_ModmailConversation>;
-    public async getNewModmailConversation(id: string): Promise<_ModmailConversation>;
-    public async markNewModmailConversationsAsRead(convs: _ModmailConversation[]): Promise<void>;
-    public async markNewModmailConversationsAsUnread(convs: _ModmailConversation[]): Promise<void>;
-    public async getNewModmailSubreddits(): Promise<_Subreddit[]>;
-    public async getUnreadNewModmailConversationsCount(): Promise<{ highlighted: number, notifications: number, archived: number, appeals: number, new: number, inprogress: number, mod: number }>;
-    public async bulkReadNewModmail(subs: Array<_Subreddit | string>, state: 'new'|'inprogress'|'mod'|'notifications'|'archived'|'appeals'|'highlighted'|'all'): Promise<_Listing<_ModmailConversation>>;
-    public async getNewSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getOauthScopeList(): Promise<{ [key: string]: { description: string; id: string; name: string } }>;
-    public async getPopularSubreddits(options?: ListingOptions): Promise<_Listing<_Subreddit>>;
-    public async getPreferences(): Promise<any>;
-    public async getRandomSubmission(subredditName?: string): Promise<_Submission>;
-    public async getRising(subredditName?: string, options?: ListingOptions): Promise<_Listing<_Submission>>;
-    public async getSavedCategories(): Promise<any[]>;
-    public async getSentMessages(options?: ListingOptions): Promise<_Listing<_PrivateMessage>>;
-    public async getStickiedLivethread(): Promise<_LiveThread | undefined>;
-    public async getSubmission(submissionId: string): _Submission;
-    public async getSubreddit(displayName: string): _Subreddit;
-    public async getSubscriptions(options?: ListingOptions): _Listing<_Subreddit>;
-    public async getTop(subredditName?: string, options?: SortedListingOptions): Promise<_Listing<_Submission>>;
-    public async getUnreadMessages(options?: ListingOptions): Promise<_Listing<_PrivateMessage>>;
-    public async getUser(name: string): _RedditUser;
-    public async markAsVisited(links: _Submission[]): Promise<void>;
-    public async markMessagesAsRead(messages: _PrivateMessage[] | string[]): Promise<void>;
-    public async markMessagesAsUnread(messages: _PrivateMessage[] | string[]): Promise<void>;
-    public async oauthRequest(options: RequestOptions): Promise<any>;
-    public async rawRequest(options: RequestOptions): Promise<any>;
-    public async readAllMessages(): Promise<void>;
-    public async revokeRefreshToken(): Promise<void>;
-    public async search(options: Snoowrap.SearchOptions): Promise<_Listing<_Submission>>;
-    public async searchSubredditNames(options: { query: string; exact?: boolean; includeNsfw?: boolean; }): Promise<string[]>;
-    public async searchSubreddits(options: ListingOptions & { query: string }): Promise<_Listing<_Subreddit>>;
-    public async searchSubredditTopics(options: { query: string; }): Promise<_Subreddit[]>;
-    public async submitLink(options: Snoowrap.SubmitLinkOptions): Promise<_Submission>;
-    public async submitSelfpost(options: Snoowrap.SubmitSelfPostOptions): Promise<_Submission>;
-    public async unauthenticatedRequest(options: RequestOptions): Promise<any>; // options: https://www.npmjs.com/package/request
-    public async updateAccessToken(): Promise<string>;
-    public async updatePreferences(updatedPreferences: any): Promise<void>;
-*/
+    public async composeMessage(options: ComposeMessageParams): Promise<any>{
+        throw new NotImplemented()
+    }
+
+    public async config(opts?: ConfigOptions): ConfigOptions{
+        throw new NotImplemented()
+    }
+    
+    public async createLivethread(options: LiveThreadSettings): Promise<LiveThread>{
+        throw new NotImplemented()
+    }
+    
+    public async createMultireddit(options: MultiRedditProperties & { name: string; subreddits: Subreddit[] | string[]}): Promise<MultiReddit>{
+        throw new NotImplemented()
+    }
+    
+    public async createSubreddit(options: SubredditSettings): Promise<Subreddit>{
+        throw new NotImplemented()
+    }
+    
+    public async credentialedClientRequest(options?: RequestOptions): Promise<any>{
+        throw new NotImplemented()
+    }
+    
+    public async getBlockedUsers(): Promise<RedditUser[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getCaptchaImage(identifier: string): Promise<string>{
+        throw new NotImplemented()
+    }
+    
+    public async getComment(commentId: string): Promise<Comment>{
+        throw new NotImplemented()
+    }
+    
+    public async getContributorSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getControversial(subredditName?: string, options?: SortedListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getDefaultSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getFriends(): Promise<RedditUser[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getGoldSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getHot(subredditName?: string, options?: ListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getBest(options?: ListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getInbox(options?: { filter?: string }): Promise<Listing<PrivateMessage | Comment>>{
+        throw new NotImplemented()
+    }
+    
+    public async getKarma(): Promise<Array<{ sr: Subreddit; comment_karma: number; link_karma: number; }>>{
+        throw new NotImplemented()
+    }
+    
+    public async getLivethread(threadId: string): Promise<LiveThread>{
+        throw new NotImplemented()
+    }
+    
+    public async getMe(): Promise<RedditUser>{
+        throw new NotImplemented()
+    }
+    
+    public async getMessage(messageId: string): Promise<PrivateMessage>{
+        throw new NotImplemented()
+    }
+    
+    public async getModeratedSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getModmail(options?: ListingOptions): Promise<Listing<PrivateMessage>>{
+        throw new NotImplemented()
+    }
+    
+    public async getMyMultireddits(): Promise<MultiReddit[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getMyTrophies(): Promise<Trophy[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getNew(subredditName?: string, options?: ListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewCaptchaIdentifier(): Promise<string>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewComments(subredditName?: string, options?: ListingOptions): Promise<Listing<Comment>>{
+        throw new NotImplemented()
+    }
+    
+    public async getContentByIds(ids: Array<Submission | Comment | string>) : Promise<Listing<Submission | Comment>>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewModmailConversations(options?: ListingOptions & { entity?: string }): Promise<Listing<ModmailConversation>>{
+        throw new NotImplemented()
+    }
+    
+    public async createModmailDiscussion(options: { body: string, subject: string, srName: string }): Promise<ModmailConversation>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewModmailConversation(id: string): Promise<ModmailConversation>{
+        throw new NotImplemented()
+    }
+    
+    public async markNewModmailConversationsAsRead(convs: ModmailConversation[]): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async markNewModmailConversationsAsUnread(convs: ModmailConversation[]): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewModmailSubreddits(): Promise<Subreddit[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getUnreadNewModmailConversationsCount(): Promise<{ highlighted: number, notifications: number, archived: number, appeals: number, new: number, inprogress: number, mod: number }>{
+        throw new NotImplemented()
+    }
+    
+    public async bulkReadNewModmail(subs: Array<Subreddit | string>, state: 'new'|'inprogress'|'mod'|'notifications'|'archived'|'appeals'|'highlighted'|'all'): Promise<Listing<ModmailConversation>>{
+        throw new NotImplemented()
+    }
+    
+    public async getNewSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getOauthScopeList(): Promise<{ [key: string]: { description: string; id: string; name: string } }>{
+        throw new NotImplemented()
+    }
+    
+    public async getPopularSubreddits(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getPreferences(): Promise<any>{
+        throw new NotImplemented()
+    }
+    
+    public async getRandomSubmission(subredditName?: string): Promise<Submission>{
+        throw new NotImplemented()
+    }
+    
+    public async getRising(subredditName?: string, options?: ListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getSavedCategories(): Promise<any[]>{
+        throw new NotImplemented()
+    }
+    
+    public async getSentMessages(options?: ListingOptions): Promise<Listing<PrivateMessage>>{
+        throw new NotImplemented()
+    }
+    
+    public async getStickiedLivethread(): Promise<LiveThread | undefined>{
+        throw new NotImplemented()
+    }
+    
+    public async getSubmission(submissionId: string): Promise<Submission>{
+        throw new NotImplemented()
+    }
+    
+    public async getSubreddit(displayName: string): Promise<Subreddit>{
+        throw new NotImplemented()
+    }
+    
+    public async getSubscriptions(options?: ListingOptions): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async getTop(subredditName?: string, options?: SortedListingOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async getUnreadMessages(options?: ListingOptions): Promise<Listing<PrivateMessage>>{
+        throw new NotImplemented()
+    }
+    
+    public async getUser(name: string): Promise<RedditUser>{
+        throw new NotImplemented()
+    }
+    
+    public async markAsVisited(links: Submission[]): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async markMessagesAsRead(messages: PrivateMessage[] | string[]): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async markMessagesAsUnread(messages: PrivateMessage[] | string[]): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async oauthRequest(options: RequestOptions): Promise<any>{
+        throw new NotImplemented()
+    }
+    
+    public async rawRequest(options: RequestOptions): Promise<any>{
+        throw new NotImplemented()
+    }
+    
+    public async readAllMessages(): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async revokeRefreshToken(): Promise<void>{
+        throw new NotImplemented()
+    }
+    
+    public async search(options: SearchOptions): Promise<Listing<Submission>>{
+        throw new NotImplemented()
+    }
+    
+    public async searchSubredditNames(options: { query: string; exact?: boolean; includeNsfw?: boolean; }): Promise<string[]>{
+        throw new NotImplemented()
+    }
+    
+    public async searchSubreddits(options: ListingOptions & { query: string }): Promise<Listing<Subreddit>>{
+        throw new NotImplemented()
+    }
+    
+    public async searchSubredditTopics(options: { query: string; }): Promise<Subreddit[]>{
+        throw new NotImplemented()
+    }
+    
+    public async submitLink(options: SubmitLinkOptions): Promise<Submission>{
+        throw new NotImplemented()
+    }
+    
+    public async submitSelfpost(options: SubmitSelfPostOptions): Promise<Submission>{
+        throw new NotImplemented()
+    }
+
+    public async unauthenticatedRequest(options: RequestOptions): Promise<any>{// options: https://www.npmjs.com/package/request
+        throw new NotImplemented()
+    }
+     
+    public async updateAccessToken(): Promise<string>{
+        throw new NotImplemented()
+    }
+    
+    public async updatePreferences(updatedPreferences: any): Promise<void>{
+        throw new NotImplemented()
+    }
 
     public async getListing<Type>( {uri, qs = {}, ...options} : any ) : Promise<Listing<Type>>{
         const mergedQuery = {count: 9999, ...qs};
