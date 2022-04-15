@@ -4,7 +4,7 @@ import RedditContent from "../mixins/RedditContent";
 import Listing, { ListingOptions } from "./Listing";
 import RedditUser from "./RedditUser";
 import Submission from "./Submission";
-import Subreddit from "./subreddit";
+import Subreddit from "./Subreddit";
 
 export default interface WikiPage extends RedditContent<WikiPage>{
     content_html: string;

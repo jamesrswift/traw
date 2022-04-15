@@ -1,6 +1,6 @@
 import RedditContent from "../mixins/RedditContent";
 import RedditUser from "./RedditUser";
-import Subreddit from "./subreddit";
+import Subreddit from "./Subreddit";
 
 export enum NoteType{
     NOTE = 'NOTE',

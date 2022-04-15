@@ -1,6 +1,6 @@
 import RedditContent from "../../mixins/RedditContent";
 import Listing from "../Listing";
-import Subreddit from "../subreddit";
+import Subreddit from "../Subreddit";
 
 export default interface RedditUser extends RedditContent<RedditUser>{
     comment_karma: number;

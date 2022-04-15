@@ -2,7 +2,7 @@ import traw from "../traw"
 import VoteableContent, { RichTextFlair } from "../mixins/VoteableContent";
 import Listing, { ListingOptions } from "./Listing";
 import Comment from "./Comment"
-import { FlairTemplate, Sort } from "./subreddit";
+import { FlairTemplate, Sort } from "./Subreddit";
 import { AxiosResponse } from "axios";
 import { api_type } from "../../tier0/constants";
 import { addFullnamePrefix } from "../traw/helpers";

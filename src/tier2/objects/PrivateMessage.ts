@@ -3,7 +3,7 @@ import { NotImplemented } from "../../tier0/exceptions";
 import ReplyableContent from "../mixins/ReplyableContent";
 import Listing from "./Listing";
 import RedditUser from "./RedditUser";
-import Subreddit from "./subreddit";
+import Subreddit from "./Subreddit";
 
 export default interface PrivateMessage
 extends ReplyableContent<PrivateMessage> {
