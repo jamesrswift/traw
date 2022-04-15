@@ -34,11 +34,11 @@ export default class traw{
             link_id: submissionId ? addFullnamePrefix(submissionId, "t3_") : undefined,
             _sort: sort
         }, this)
-    }
+    }*/
 
     public getSubreddit(displayName: string): Subreddit{
         return new Subreddit({ display_name: displayName.replace(/^\/?r\//, "") }, this)
-    }*/
+    }
 
     public getMessage(messageId: string): PrivateMessage {
         return new PrivateMessage({
