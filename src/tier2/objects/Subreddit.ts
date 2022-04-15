@@ -9,37 +9,42 @@ import WikiPage, { WikiPageRevision } from "./WikiPage";
 // import ModmailConversation from "./ModmailConversation";
 import { RichTextFlair } from "../mixins/VoteableContent";
 import { AxiosResponse } from "axios";
-import { NotImplemented } from "../../tier0/exceptions";
 
 export default interface Subreddit extends RedditContent<Subreddit> {
+	accept_followers: boolean; // Added 15/04/22
 	accounts_active_is_fuzzed: boolean;
 	accounts_active: number;
 	active_user_count: number;
 	advertiser_category: string | null;
 	all_original_content: boolean;
 	allow_discovery: boolean;
+	allow_galleries: boolean; // Added 15/04/22
 	allow_images: boolean;
+	allow_polls: boolean; // Added 15/04/22
+	allow_prediction_contributors: boolean; // Added 15/04/22
+	allow_predictions_tournament: boolean; // Added 15/04/22
+	allow_predictions: boolean; // Added 15/04/22
+	allow_talks: boolean; // Added 15/04/22
 	allow_videogifs: boolean;
 	allow_videos: boolean;
-	/** HEX color code */
-	banner_background_color: string;
-	/** URL of the banner image used on desktop Reddit */
-	banner_background_image: string;
-	/** URL of the banner image used on the mobile Reddit app */
-	banner_img: string;
+	banner_background_color: string; /** HEX color code */
+	banner_background_image: string; /** URL of the banner image used on desktop Reddit */
+	banner_img: string; /** URL of the banner image used on the mobile Reddit app */
 	banner_size: [number, number] | null;
 	can_assign_link_flair: boolean;
 	can_assign_user_flair: boolean;
 	collapse_deleted_comments: boolean;
 	comment_score_hide_mins: number;
-	/** Image URL of the subreddit icon */
-	community_icon: string;
+	community_icon: string;/** Image URL of the subreddit icon */
+	community_reviewed: boolean; // Added 15/04/22
 	description_html: string;
 	description: string;
-	display_name: string;
+	disable_contributor_requests: boolean; // Added 15/04/22
 	display_name_prefixed: string;
+	display_name: string;
 	emojis_custom_size: [number, number] | null;
 	emojis_enabled: boolean;
+	free_form_reports: boolean; // Added 15/04/22
 	has_menu_widget: boolean;
 	header_img: string | null;
 	header_size: [number, number] | null;
@@ -47,20 +52,25 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	hide_ads: boolean;
 	icon_img: string;
 	icon_size: [number, number] | null;
+	is_crosspostable_subreddit: boolean; // Added 15/04/22
 	is_enrolled_in_new_modmail: boolean | null;
 	key_color: string;
 	lang: string;
 	link_flair_enabled: boolean;
 	link_flair_position: "" | "left" | "right";
-	/** Will be null if user is not subscribed to this subreddit */
-	notification_level: string | null;
+	mobile_banner_image: string; // Added 15/04/22; value : '' when tested
+	notification_level: string | null;/** Will be null if user is not subscribed to this subreddit */
+	original_content_tag_enabled: boolean; // Added 15/04/22
 	over18: boolean;
-	/** HEX color code */
-	primary_color: string;
+	prediction_leaderboard_entry_type: string; // Added 15/04/22;  value : 'SUBREDDIT_HEADER' when tested
+	primary_color: string;/** HEX color code */
 	public_description_html: string;
 	public_description: string;
 	public_traffic: boolean;
 	quarantine: boolean;
+	restrict_commenting: boolean; // Added 15/04/22
+	restrict_posting: boolean; // Added 15/04/22
+	should_archive_posts: boolean; // Added 15/04/22
 	show_media_preview: boolean;
 	show_media: boolean;
 	spoilers_enabled: boolean;
@@ -81,8 +91,9 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	user_flair_position: "" | "left" | "right";
 	user_flair_richtext: RichTextFlair[];
 	user_flair_template_id: string | null;
-	user_flair_text: string | null;
 	user_flair_text_color: "dark" | "light" | null;
+	user_flair_text: string | null;
+	user_flair_type: string; // Added 15/04/22
 	user_has_favorited: boolean;
 	user_is_banned: boolean;
 	user_is_contributor: boolean;
@@ -94,26 +105,6 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	whitelist_status: string;
 	wiki_enabled: boolean;
 	wls: number;
-
-	// Added 15/04/22
-	restrict_posting: boolean;
-	free_form_reports: boolean;
-	original_content_tag_enabled: boolean;
-	allow_galleries: boolean;
-	prediction_leaderboard_entry_type: string; // value : 'SUBREDDIT_HEADER' when tested
-	allow_predictions: boolean;
-	community_reviewed: boolean;
-	allow_talks: boolean;
-	disable_contributor_requests: boolean;
-	should_archive_posts: boolean;
-	user_flair_type: string;
-	allow_polls: boolean;
-	is_crosspostable_subreddit: boolean;
-	allow_prediction_contributors: boolean;
-	accept_followers: boolean;
-	restrict_commenting: boolean;
-	mobile_banner_image: string; // value : '' when tested
-	allow_predictions_tournament: boolean;
 }
 
 export default class Subreddit extends RedditContent<Subreddit> {
@@ -129,104 +120,104 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		}, any>><unknown>response).data.data;
 
 		// Assignment
-		this.user_flair_background_color = payload.user_flair_background_color;
-		this.submit_text_html = payload.submit_text_html;
-		this.restrict_posting = payload.restrict_posting;
-		this.user_is_banned = payload.user_is_banned;
-		this.free_form_reports = payload.free_form_reports;
-		this.wiki_enabled = payload.wiki_enabled;
-		this.user_is_muted = payload.user_is_muted;
-		this.user_can_flair_in_sr = payload.user_can_flair_in_sr;
-		this.display_name = payload.display_name;
-		this.header_img = payload.header_img;
-		this.title = payload.title;
-		this.original_content_tag_enabled = payload.original_content_tag_enabled;
-		this.allow_galleries = payload.allow_galleries;
-		this.icon_size = payload.icon_size;
-		this.primary_color = payload.primary_color;
-		this.active_user_count = payload.active_user_count;
-		this.icon_img = payload.icon_img;
-		this.display_name_prefixed = payload.display_name_prefixed;
+		this.accept_followers = payload.accept_followers;
 		this.accounts_active = payload.accounts_active;
-		this.public_traffic = payload.public_traffic;
-		this.subscribers = payload.subscribers;
-		this.user_flair_richtext = payload.user_flair_richtext;
-		this.name = payload.name;
-		this.quarantine = payload.quarantine;
-		this.hide_ads = payload.hide_ads;
-		this.prediction_leaderboard_entry_type = payload.prediction_leaderboard_entry_type;
-		this.emojis_enabled = payload.emojis_enabled;
+		this.accounts_active_is_fuzzed = payload.accounts_active_is_fuzzed;
+		this.active_user_count = payload.active_user_count;
 		this.advertiser_category = payload.advertiser_category;
-		this.public_description = payload.public_description;
-		this.comment_score_hide_mins = payload.comment_score_hide_mins;
-		this.allow_predictions = payload.allow_predictions;
-		this.user_has_favorited = payload.user_has_favorited;
-		this.user_flair_template_id = payload.user_flair_template_id;
-		this.community_icon = payload.community_icon;
-		this.banner_background_image = payload.banner_background_image;
-		this.header_title = payload.header_title;
-		this.community_reviewed = payload.community_reviewed;
-		this.submit_text = payload.submit_text;
-		this.description_html = payload.description_html;
-		this.spoilers_enabled = payload.spoilers_enabled;
-		this.allow_talks = payload.allow_talks;
-		this.header_size = payload.header_size;
-		this.user_flair_position = payload.user_flair_position;
 		this.all_original_content = payload.all_original_content;
+		this.allow_discovery = payload.allow_discovery;
+		this.allow_galleries = payload.allow_galleries;
+		this.allow_images = payload.allow_images;
+		this.allow_polls = payload.allow_polls;
+		this.allow_prediction_contributors = payload.allow_prediction_contributors;
+		this.allow_predictions = payload.allow_predictions;
+		this.allow_predictions_tournament = payload.allow_predictions_tournament;
+		this.allow_talks = payload.allow_talks;
+		this.allow_videogifs = payload.allow_videogifs;
+		this.allow_videos = payload.allow_videos;
+		this.banner_background_color = payload.banner_background_color;
+		this.banner_background_image = payload.banner_background_image;
+		this.banner_img = payload.banner_img;
+		this.banner_size = payload.banner_size;
+		this.can_assign_link_flair = payload.can_assign_link_flair;
+		this.can_assign_user_flair = payload.can_assign_user_flair;
+		this.collapse_deleted_comments = payload.collapse_deleted_comments;
+		this.comment_score_hide_mins = payload.comment_score_hide_mins;
+		this.community_icon = payload.community_icon;
+		this.community_reviewed = payload.community_reviewed;
+		this.created = payload.created;
+		this.created_utc = payload.created_utc;
+		this.description = payload.description;
+		this.description_html = payload.description_html;
+		this.disable_contributor_requests = payload.disable_contributor_requests;
+		this.display_name = payload.display_name;
+		this.display_name_prefixed = payload.display_name_prefixed;
+		this.emojis_custom_size = payload.emojis_custom_size;
+		this.emojis_enabled = payload.emojis_enabled;
+		this.free_form_reports = payload.free_form_reports;
 		this.has_menu_widget = payload.has_menu_widget;
+		this.header_img = payload.header_img;
+		this.header_size = payload.header_size;
+		this.header_title = payload.header_title;
+		this.hide_ads = payload.hide_ads;
+		this.icon_img = payload.icon_img;
+		this.icon_size = payload.icon_size;
+		this.id = payload.id;
+		this.is_crosspostable_subreddit = payload.is_crosspostable_subreddit;
 		this.is_enrolled_in_new_modmail = payload.is_enrolled_in_new_modmail;
 		this.key_color = payload.key_color;
-		this.can_assign_user_flair = payload.can_assign_user_flair;
-		this.created = payload.created;
-		this.wls = payload.wls;
-		this.show_media_preview = payload.show_media_preview;
-		this.submission_type = payload.submission_type;
-		this.user_is_subscriber = payload.user_is_subscriber;
-		this.disable_contributor_requests = payload.disable_contributor_requests;
-		this.allow_videogifs = payload.allow_videogifs;
-		this.should_archive_posts = payload.should_archive_posts;
-		this.user_flair_type = payload.user_flair_type;
-		this.allow_polls = payload.allow_polls;
-		this.collapse_deleted_comments = payload.collapse_deleted_comments;
-		this.emojis_custom_size = payload.emojis_custom_size;
-		this.public_description_html = payload.public_description_html;
-		this.allow_videos = payload.allow_videos;
-		this.is_crosspostable_subreddit = payload.is_crosspostable_subreddit;
-		this.notification_level = payload.notification_level;
-		this.can_assign_link_flair = payload.can_assign_link_flair;
-		this.accounts_active_is_fuzzed = payload.accounts_active_is_fuzzed;
-		this.allow_prediction_contributors = payload.allow_prediction_contributors;
-		this.submit_text_label = payload.submit_text_label;
-		this.link_flair_position = payload.link_flair_position;
-		this.user_sr_flair_enabled = payload.user_sr_flair_enabled;
-		this.user_flair_enabled_in_sr = payload.user_flair_enabled_in_sr;
-		this.allow_discovery = payload.allow_discovery;
-		this.accept_followers = payload.accept_followers;
-		this.user_sr_theme_enabled = payload.user_sr_theme_enabled;
-		this.link_flair_enabled = payload.link_flair_enabled;
-		this.subreddit_type = payload.subreddit_type;
-		this.suggested_comment_sort = payload.suggested_comment_sort;
-		this.banner_img = payload.banner_img;
-		this.user_flair_text = payload.user_flair_text;
-		this.banner_background_color = payload.banner_background_color;
-		this.show_media = payload.show_media;
-		this.id = payload.id;
-		this.user_is_moderator = payload.user_is_moderator;
-		this.over18 = payload.over18;
-		this.description = payload.description;
-		this.submit_link_label = payload.submit_link_label;
-		this.user_flair_text_color = payload.user_flair_text_color;
-		this.restrict_commenting = payload.restrict_commenting;
-		this.user_flair_css_class = payload.user_flair_css_class;
-		this.allow_images = payload.allow_images;
 		this.lang = payload.lang;
-		this.whitelist_status = payload.whitelist_status;
-		this.url = payload.url;
-		this.created_utc = payload.created_utc;
-		this.banner_size = payload.banner_size;
+		this.link_flair_enabled = payload.link_flair_enabled;
+		this.link_flair_position = payload.link_flair_position;
 		this.mobile_banner_image = payload.mobile_banner_image;
+		this.name = payload.name;
+		this.notification_level = payload.notification_level;
+		this.original_content_tag_enabled = payload.original_content_tag_enabled;
+		this.over18 = payload.over18;
+		this.prediction_leaderboard_entry_type = payload.prediction_leaderboard_entry_type;
+		this.primary_color = payload.primary_color;
+		this.public_description = payload.public_description;
+		this.public_description_html = payload.public_description_html;
+		this.public_traffic = payload.public_traffic;
+		this.quarantine = payload.quarantine;
+		this.restrict_commenting = payload.restrict_commenting;
+		this.restrict_posting = payload.restrict_posting;
+		this.should_archive_posts = payload.should_archive_posts;
+		this.show_media = payload.show_media;
+		this.show_media_preview = payload.show_media_preview;
+		this.spoilers_enabled = payload.spoilers_enabled;
+		this.submission_type = payload.submission_type;
+		this.submit_link_label = payload.submit_link_label;
+		this.submit_text = payload.submit_text;
+		this.submit_text_html = payload.submit_text_html;
+		this.submit_text_label = payload.submit_text_label;
+		this.subreddit_type = payload.subreddit_type;
+		this.subscribers = payload.subscribers;
+		this.suggested_comment_sort = payload.suggested_comment_sort;
+		this.title = payload.title;
+		this.url = payload.url;
+		this.user_can_flair_in_sr = payload.user_can_flair_in_sr;
+		this.user_flair_background_color = payload.user_flair_background_color;
+		this.user_flair_css_class = payload.user_flair_css_class;
+		this.user_flair_enabled_in_sr = payload.user_flair_enabled_in_sr;
+		this.user_flair_position = payload.user_flair_position;
+		this.user_flair_richtext = payload.user_flair_richtext;
+		this.user_flair_template_id = payload.user_flair_template_id;
+		this.user_flair_text = payload.user_flair_text;
+		this.user_flair_text_color = payload.user_flair_text_color;
+		this.user_flair_type = payload.user_flair_type;
+		this.user_has_favorited = payload.user_has_favorited;
+		this.user_is_banned = payload.user_is_banned;
 		this.user_is_contributor = payload.user_is_contributor;
-		this.allow_predictions_tournament = payload.allow_predictions_tournament;
+		this.user_is_moderator = payload.user_is_moderator;
+		this.user_is_muted = payload.user_is_muted;
+		this.user_is_subscriber = payload.user_is_subscriber;
+		this.user_sr_flair_enabled = payload.user_sr_flair_enabled;
+		this.user_sr_theme_enabled = payload.user_sr_theme_enabled;
+		this.whitelist_status = payload.whitelist_status;
+		this.wiki_enabled = payload.wiki_enabled;
+		this.wls = payload.wls;
 
 		return this;
 	}
