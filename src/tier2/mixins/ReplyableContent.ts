@@ -1,33 +1,65 @@
+import { api_type } from "../../tier0/constants";
+import { NotImplemented } from "../../tier0/exceptions";
+import { Sort } from "../objects/subreddit";
 import RedditContent from "./RedditContent";
 
-export default class ReplyableContent<Type> extends RedditContent<Type> {
+export default interface ReplyableContent<
+Type extends ReplyableContent<Type>
+> extends RedditContent<Type> {
+	_sort: Sort
+}
 
-    approve() : Promise<this> {
+export default class ReplyableContent<
+	Type extends ReplyableContent<Type>
+> extends RedditContent<Type> {
+	public async approve(): Promise<this> {
+		await this.post({ url: "api/approve", form: { id: this.name } });
+		return this;
+	}
 
-    }
+	public async blockAuthor(): Promise<this> {
+		await this.post({ url: "api/block", form: { id: this.name } });
+		return this;
+	}
 
-    blockAuthor() : Promise<this> {
+	public async ignoreReports(): Promise<this> {
+		await this.post({ url: "api/ignore_reports", form: { id: this.name } });
+		return this;
+	}
 
-    }
+	public async remove(spam: boolean = false): Promise<this> {
+		await this.post({
+			url: "api/remove",
+			form: { spam: spam, id: this.name },
+		});
+		return this;
+	}
 
-    ignoreReports() : Promise<this> {
+	public async reply<ReplyType extends ReplyableContent<ReplyType>>(
+		text: string
+	): Promise<ReplyType>;
+	public async reply(text: string): Promise<ReplyableContent<Type>> {
+		throw new NotImplemented();
+	}
 
-    }
+	public async report(reason?: string, other_reason?: string): Promise<this> {
+		await this.post({
+			url: "api/report",
+			form: {
+				api_type,
+				reason: reason ?? "other",
+				other_reason: other_reason,
+				thing_id: this.name,
+			},
+		});
+		return this;
+	}
 
-    remove( /* Options needs defining! */ ) : Promise<this> {
-
-    }
-
-    reply(text: string) : Promise<ReplyableContent<T>> {
-
-    }
-
-    report( /* Options needs defining! */ ) : Promise<this>{
-
-    }
-
-    unignoreReports() : Promise<this> {
-
-    }
-    
+	public async unignoreReports(): Promise<this> {
+		await this.post({
+			url: "api/unignore_reports",
+			form: { id: this.name },
+		});
+		return this;
+	}
 }
