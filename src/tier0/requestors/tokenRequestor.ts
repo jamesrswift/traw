@@ -5,6 +5,7 @@ import userAgent from "../useragent";
 import credentialedRequestor from "./credentialedRequestor";
 import { util } from "chai";
 import { updateAccessTokenError } from "../exceptions";
+import { AxiosInstance } from "axios";
 
 export interface credentialsResponse {
     access_token: string
@@ -37,7 +38,7 @@ export default class tokenRequestor extends baseRequestor{
         // Validate token
         this.token = await this.updateAccessToken();
 
-        const res = await axiosCreate({
+        const instance : AxiosInstance = await axiosCreate({
             baseURL: 'https://oauth.reddit.com',
             headers: {
                 authorization: this.token.toString(),
@@ -46,8 +47,9 @@ export default class tokenRequestor extends baseRequestor{
             params: {
                 raw_json: 1
             }
-        }).request(config)
+        })
 
+        const res = await instance.request(config);
         this.handleRateLimitResponse(res)
 
         return res

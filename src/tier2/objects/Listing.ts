@@ -1,4 +1,5 @@
-import traw from "..";
+import { NotImplemented } from "../../tier0/exceptions";
+import traw from "../traw"
 
 export interface ListingOptions {
 	limit?: number;
@@ -15,7 +16,6 @@ export interface SortedListingOptions extends ListingOptions {
 export interface FetchMoreOptions {
 	amount: number;
 	skipReplies?: boolean;
-	skip_replies?: boolean;
 	append?: boolean;
 }
 
@@ -33,4 +33,13 @@ export default class Listing<Type> extends Array<Type> {
         this.traw = traw;
 
     }
+
+	fetchMore(options: FetchMoreOptions): Listing<Type>{
+		throw new NotImplemented()
+	}
+
+	fetchAll(options?: FetchMoreOptions): Listing<Type>{
+		throw new NotImplemented()
+	}
+
 }

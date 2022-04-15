@@ -24,7 +24,7 @@ export default class traw{
     public post( options: any ){ return this.requestor.post(options) }
     public put( options: any ){ return this.requestor.put(options) }
 
-    public getUser(name: string): RedditUser{
+    /*public getUser(name: string): RedditUser{
         return new RedditUser({ name: name.replace(/^\/?u\//, "") }, this)
     }
 
@@ -38,14 +38,14 @@ export default class traw{
 
     public getSubreddit(displayName: string): Subreddit{
         return new Subreddit({ display_name: displayName.replace(/^\/?r\//, "") }, this)
-    }
+    }*/
 
     public getMessage(messageId: string): PrivateMessage {
         return new PrivateMessage({
             name: addFullnamePrefix(messageId, "t4_")
         }, this)
     }
-
+/*
     public getLivethread(threadId: string): LiveThread {
 		return new LiveThread( {
 			id: addFullnamePrefix(threadId, "LiveUpdateEvent_").slice(16),
@@ -106,8 +106,19 @@ export default class traw{
 			form: { api_type },
 		});
 		return res.json.data.iden;
-	}
+	}*/
 
-    
+    public async markMessagesAsRead(messages: PrivateMessage[] | string[]): Promise<void>{
+        const messageIds = messages.map(message => addFullnamePrefix(message, 't4_'));
+        await this.post({url: 'api/read_message', form: {id: messageIds.join(',')}});
+        return;
+    }
+
+    public async markMessagesAsUnread(messages: PrivateMessage[] | string[]): Promise<void>{
+        const messageIds = messages.map(message => addFullnamePrefix(message, 't4_'));
+        await this.post({url: 'api/unread_message', form: {id: messageIds.join(',')}});
+        return;
+    }
+  
 
 }

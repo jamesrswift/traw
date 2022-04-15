@@ -1,5 +1,8 @@
 import { api_type } from "../../tier0/constants";
+import Listing from "../objects/Listing";
+import RedditUser from "../objects/RedditUser";
 import Subreddit from "../objects/subreddit";
+import { handleJsonErrors } from "../traw/helpers";
 import ReplyableContent from "./ReplyableContent";
 
 export interface RichTextFlair {
@@ -81,8 +84,8 @@ export default interface VoteableContent<Type extends VoteableContent<Type>>
 	ups: number;
 	user_reports: string[];
 
-	comments: any;
-	replies: any;
+	comments: Listing<Comment>;
+	replies: Listing<Comment>;
 }
 
 export default class VoteableContent<Type extends VoteableContent<Type>>
@@ -103,7 +106,7 @@ export default class VoteableContent<Type extends VoteableContent<Type>>
 	}
 
 	public async _mutateAndExpandReplies(limit: number, depth: number) {
-		if (depth <= 0) {
+		/*if (depth <= 0) {
 			return this;
 		}
 		const repliesKey = this.constructor.name === "Submission" ? "comments" : "replies";
@@ -113,7 +116,7 @@ export default class VoteableContent<Type extends VoteableContent<Type>>
 		this[repliesKey] = replies;
 		replies.slice(0, limit).map((reply: Type) =>
 			reply._mutateAndExpandReplies(limit, depth - 1)
-		);
+		);*/
 		return this;
 	}
 

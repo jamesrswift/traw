@@ -13,7 +13,7 @@ export default abstract class RedditContent<Type extends RedditContent<Type>> {
 
     protected _fetch?: Type;
 
-    constructor( options: Partial<Type>, protected traw: traw, protected _hasFetched: boolean = false ){
+    constructor( options: Partial<Type>, public traw: traw, protected _hasFetched: boolean = false ){
 
         // parse options
         for ( const key of Object.keys(options) ){

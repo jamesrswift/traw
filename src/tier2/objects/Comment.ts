@@ -1,6 +1,6 @@
 import traw from "../traw";
 import VoteableContent from "../mixins/VoteableContent";
-import Listing, { ListingOptions } from "./Listing";
+import Listing, { FetchMoreOptions, ListingOptions } from "./Listing";
 import { AxiosResponse } from "axios";
 import { NotImplemented } from "../../tier0/exceptions";
 
@@ -17,7 +17,6 @@ export default interface Comment extends VoteableContent<Comment> {
 	link_id: string;
 	parent_id: string;
 	removed: boolean;
-	replies: Listing<Comment>;
 	score_hidden: boolean;
 	spam: boolean;
 }
@@ -57,7 +56,7 @@ export default class Comment extends VoteableContent<Comment> {
         return this
     }
 
-    public async fetchMore(options: ListingOptions | number) : Listing<Comment> {
+    public async fetchMore(options: FetchMoreOptions) : Promise<Listing<Comment>> {
         if ( typeof options !== "number"){
             /*options.append = true;*/
         }
@@ -69,10 +68,11 @@ export default class Comment extends VoteableContent<Comment> {
         }*/
 
         this.replies = comments;
-        return this.comments;
+        //return this.replies;
+        return new Listing<Comment>({}, this.traw)
     }
 
-    public async fetchAll(options: ListingOptions ) : Listing<Comment> {
+    public async fetchAll(options: ListingOptions ) : Promise<Listing<Comment>> {
         return this.fetchMore({...options, amount: Infinity})
     }
 }
