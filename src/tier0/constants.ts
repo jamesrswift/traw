@@ -5,3 +5,5 @@ export const API_RULES_LINK = 'https://github.com/reddit/reddit/wiki/API';
 export const api_type = 'json';
 
 export const MAX_LISTING_ITEMS = 100;
+export const MODERATOR_PERMISSIONS = ['wiki', 'posts', 'access', 'mail', 'config', 'flair'];
+export const LIVETHREAD_PERMISSIONS = ['update', 'edit', 'manage'];

@@ -1,5 +1,5 @@
 import Comment from "./Comment";
-import Listing, { ListingOptions } from "./Listing";
+import Listing, { ListingOptions, SortedListingOptions } from "./Listing";
 import PrivateMessage from "./PrivateMessage";
 import RedditContent from "../mixins/RedditContent";
 import RedditUser from "./RedditUser";
@@ -9,10 +9,12 @@ import WikiPage, { WikiPageRevision } from "./WikiPage";
 import { RichTextFlair } from "../mixins/VoteableContent";
 import { AxiosResponse } from "axios";
 import { api_type } from "../../tier0/constants";
-import { handleJsonErrors } from "../traw/helpers";
+import { formatModPermissions, handleJsonErrors } from "../traw/helpers";
 import { NotImplemented } from "../../tier0/exceptions";
 import { createReadStream } from "fs";
-import { SubmitLinkOptions, SubmitSelfPostOptions } from "../traw";
+import { BaseSearchOptions, SubmitLinkOptions, SubmitSelfPostOptions } from "../traw";
+import ModmailConversation from "./ModmailConversation";
+import { ModAction } from "./ModAction";
 
 export default interface Subreddit extends RedditContent<Subreddit> {
 	accept_followers: boolean; // Added 15/04/22
@@ -349,17 +351,23 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getBannedUsers(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<BannedUser>>{
-		return this.getListing({uri: `r/${this.display_name}/about/banned`, qs: renameKey(options, 'name', 'user')});
+		// Loadash.renameKey alternative:
+		(<any>options).user = options?.name;
+		delete options?.name;
+		return this.getListing({uri: `r/${this.display_name}/about/banned`, qs: options});
 	}
 
 	public async getContributors(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<Contributor>>{
-		return this.getListing({uri: `r/${this.display_name}/about/contributors`, qs: renameKey(options, 'name', 'user')});
+		// Loadash.renameKey alternative:
+		(<any>options).user = options?.name;
+		delete options?.name;
+		return this.getListing({uri: `r/${this.display_name}/about/contributors`, qs: options});
 	}
 
 	public async getControversial(
-		options?: ListingOptions & { time?: string }
+		options?: SortedListingOptions
 	): Promise<Listing<Submission>>{
 		return this.traw.getControversial(this.display_name, options);
 	}
@@ -377,18 +385,28 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getLinkFlairTemplates(linkId?: string): Promise<FlairTemplate[]>{
 		const options = linkId ? {link: linkId} : {is_newlink: true};
 		const res = await this.#getFlairOptions(options);
+
+		throw new NotImplemented();
+		// @ts-ignore
 		return res.choices;
 	}
 
 	public async getModerationLog(
-		opts?: ListingOptions & { mods?: string[]; type?: ModActionType }
+		options?: ListingOptions & { mods?: string[]; type?: ModActionType }
 	): Promise<Listing<ModAction>>{
-		const parsedOptions = omit({...options, mod: options.mods && options.mods.join(',')}, 'mods');
+		let parsedOptions: any = {...options};
+		if ( options?.mods != undefined ){
+			parsedOptions = {...options, mods: options!.mods!.join(',')}
+			delete parsedOptions.mods;
+		}
 		return this.getListing({uri: `r/${this.display_name}/about/log`, qs: parsedOptions});
 	}
 
-	public async getModerators(options?: ListingOptions & { name?: string }): RedditUser[]{
-		return this.get({url: `r/${this.display_name}/about/moderators`, params: {user: name}});
+	public async getModerators(options?: ListingOptions & { name?: string }): Promise<RedditUser[]>{
+		throw new NotImplemented();
+
+		// @ts-ignore
+		return this.get({url: `r/${this.display_name}/about/moderators`, params: {user: options.name}});
 	}
 
 	public async getModmail(options?: ListingOptions): Promise<Listing<PrivateMessage>> {
@@ -410,10 +428,16 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getMutedUsers(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<MutedUser>>{
-		return this.getListing({uri: `r/${this.display_name}/about/muted`, qs: renameKey(options, 'name', 'user')});
+		// Loadash.renameKey alternative:
+		(<any>options).user = options?.name;
+		delete options?.name;
+		return this.getListing({uri: `r/${this.display_name}/about/muted`, qs: options});
 	}
 
 	public async getMyFlair(): Promise<FlairTemplate>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return (await this.#getFlairOptions()).current;
 	}
 
@@ -431,8 +455,11 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getRecommendedSubreddits(options?: {
 		omit?: string[];
 	}): Promise<Subreddit[]>{
-		const toOmit = options.omit && options.omit.join(',');
-		const names = await this._get({url: `api/recommend/sr/${this.display_name}`, params: {omit: toOmit}});
+		const toOmit = options?.omit && options.omit.join(',');
+		const names = await this.get({url: `api/recommend/sr/${this.display_name}`, params: {omit: toOmit}});
+
+		throw new NotImplemented();
+		// @ts-ignore
 		return map(names, 'sr_name');
 	}
 	
@@ -447,10 +474,16 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	}
 
 	public async getRules(): Promise<{ rules: Rule[]; site_rules: string[] }>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return this.get({url: `r/${this.display_name}/about/rules`});
 	}
 
 	public async getSettings(): Promise<SubredditSettings>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return this.get({url: `r/${this.display_name}/about/edit`});
 	}
 
@@ -461,15 +494,25 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	}
 
 	public async getSticky(num?: number ): Promise<Submission>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return this.get({url: `r/${this.display_name}/about/sticky`, params: {num}});
 	}
 
 	public async getStylesheet(): Promise<string>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return this.get({url: `r/${this.display_name}/stylesheet`, json: false});
 	}
 
 	public async getSubmitText(): Promise<string> {
 		const res = await this.get({url: `r/${this.display_name}/api/submit_text`});
+		
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return res.submit_text;
 	}
 
@@ -487,6 +530,9 @@ export default class Subreddit extends RedditContent<Subreddit> {
 
 	public async getUserFlair(name: string): Promise<FlairTemplate> {
 		const res = await this.#getFlairOptions({name});
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return res.current;
 	}
 
@@ -511,19 +557,28 @@ export default class Subreddit extends RedditContent<Subreddit> {
 
 	public async getUserFlairTemplates(): Promise<FlairTemplate[]>{
 		const res = await this.#getFlairOptions();
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return res.choices;
 	}
 
 	public async getWikiBannedUsers(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<BannedUser>>{
-		return this.getListing({uri: `r/${this.display_name}/about/wikibanned`, qs: renameKey(options, 'name', 'user')});
+		// Loadash.renameKey alternative:
+		(<any>options).user = options?.name;
+		delete options?.name;
+		return this.getListing({uri: `r/${this.display_name}/about/wikibanned`, qs: options});
 	}
 
 	public async getWikiContributors(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<Contributor>>{
-		return this.getListing({uri: `r/${this.display_name}/about/wikicontributors`, qs: renameKey(options, 'name', 'user')});
+		// Loadash.renameKey alternative:
+		(<any>options).user = options?.name;
+		delete options?.name;
+		return this.getListing({uri: `r/${this.display_name}/about/wikicontributors`, qs: options});
 	}
 
 	public getWikiPage(title: string): WikiPage{
@@ -532,6 +587,9 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	
 	public async getWikiPages(): Promise<WikiPage[]>{
 		const res = await this.get({url: `r/${this.display_name}/wiki/pages`});
+		throw new NotImplemented();
+
+		// @ts-ignore
 		return res.map(title => this.getWikiPage(title));
 	}
 
@@ -594,13 +652,17 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		flair_template_id: string;
 		text?: string;
 	}): Promise<this>{
+		throw new NotImplemented();
+
+		// @ts-ignore
 		const name = await this.traw._getMyName();
+		// @ts-ignore
 		await this.traw._selectFlair({...options, subredditName: this.display_name, name});
 		return this;
 	}
 	public async setModeratorPermissions(
 		name: string,
-		permissions: ModeratorPermission
+		permissions: ModeratorPermission[]
 	): Promise<this>{
 		const res = await this.post({
 		  url: `r/${this.display_name}/api/setpermissions`,
@@ -748,6 +810,10 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	async #deleteFlairTemplates (flair_type: string) {
 		await this.post({url: `r/${this.display_name}/api/clearflairtemplates`, form: {api_type, flair_type}});
 		return this;
+	}
+
+	#getFlairOptions ({name, link, is_newlink}: {name?:string, link?:string, is_newlink?:boolean} = {}) { // TODO: Add shortcuts for this on RedditUser and Submission
+		return this.post({url: `r/${this.display_name}/api/flairselector`, form: {name, link, is_newlink}});
 	}
 }
 

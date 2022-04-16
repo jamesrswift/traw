@@ -1,4 +1,6 @@
 import { AxiosResponse } from "axios";
+import { LIVETHREAD_PERMISSIONS, MODERATOR_PERMISSIONS } from "../../tier0/constants";
+import { NotImplemented } from "../../tier0/exceptions";
 import ReplyableContent from "../mixins/ReplyableContent";
 import Comment from "../objects/Comment";
 import Listing from "../objects/Listing";
@@ -46,23 +48,25 @@ export function getEmptyRepliesListing <ArgType extends ReplyableContent<Type>, 
   }
 
 export function addEmptyRepliesListing<Type extends ReplyableContent<Type>>(item: Type) {
-	/*item.replies = getEmptyRepliesListing(item);*/
+	throw new NotImplemented();
 	return item;
 }
 
 export function buildRepliesTree(childList: any) {
-	/*const childMap = keyBy(childList, "name");
-	childList.forEach(addEmptyRepliesListing);
-	childList
-		.filter((child) => child.constructor._name === "Comment")
-		.forEach((child) => (child.replies._more = emptyMoreObject));
-	remove(childList, (child) => childMap[child.parent_id]).forEach((child) => {
-		if (child.constructor._name === "More") {
-			childMap[child.parent_id].replies._setMore(child);
-			child.link_id = childMap[child.parent_id].link_id;
-		} else {
-			childMap[child.parent_id].replies.push(child);
-		}
-	});
-	return childList;*/
+	throw new NotImplemented();
 }
+
+/**
+* @summary Formats permissions into a '+'/'-' string
+* @param {String[]} allPermissionNames All possible permissions in this category
+* @param {String[]} permsArray The permissions that should be enabled
+* @returns {String} The permissions formatted into a '+'/'-' string
+* @api private
+*/
+export function formatPermissions (allPermissionNames: string[], permsArray?: string[]) {
+	if ( permsArray == undefined ) return '+all';
+	return allPermissionNames.map(type => (permsArray.includes(type) ? '+' : '-') + type).join(',')
+  }
+  
+  export function formatModPermissions(permsArray?: string[] ){ return formatPermissions( MODERATOR_PERMISSIONS, permsArray) }
+  export function formatLivethreadPermissions(permsArray?: string[] ){ return formatPermissions( LIVETHREAD_PERMISSIONS, permsArray) }
