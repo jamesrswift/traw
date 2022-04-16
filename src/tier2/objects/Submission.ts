@@ -191,13 +191,13 @@ export default class Submission extends VoteableContent<Submission> {
 
 	public async assignFlair(options: {
 		text: string;
-		cssClass: string;
+		css_class: string;
 	}): Promise<this> {
 		await this.fetch();
 		await this.traw.assignFlair({
 			...options,
 			link: this.name,
-			subredditName: this.subreddit.display_name,
+			subreddit_name: this.subreddit.display_name,
 		});
 		return this;
 	}

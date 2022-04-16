@@ -73,7 +73,7 @@ export default class WikiPage extends RedditContent<WikiPage>{
         return this;
     }
 
-    /*public async getDiscussions(options?: ListingOptions): Promise<Listing<Submission>> {
+    public async getDiscussions(options?: ListingOptions): Promise<Listing<Submission>> {
         return this.getListing({uri: `r/${this.subreddit.display_name}/wiki/discussions/${this.title}`, qs: options});
     }
     
@@ -82,8 +82,10 @@ export default class WikiPage extends RedditContent<WikiPage>{
     }
     
     public async getSettings(): Promise<Settings>{
+        throw new NotImplemented();
+        // @ts-ignore
         return this.get({url: `r/${this.subreddit.display_name}/wiki/settings/${this.title}`});
-    }*/
+    }
 
     public async hideRevision(id: string ): Promise<this> {
         await this.post({

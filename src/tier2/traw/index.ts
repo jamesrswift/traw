@@ -14,7 +14,7 @@ import ModmailConversation from "../objects/ModmailConversation";
 import MultiReddit, { MultiRedditProperties } from "../objects/MultiReddit";
 
 export default interface traw {
-    _ownUserInfo?: RedditOwnUser;
+    _ownUserInfo?: RedditUser;
 }
 
 export default class traw{
@@ -30,13 +30,13 @@ export default class traw{
     public post( options: any ){ return this.requestor.post(options) }
     public put( options: any ){ return this.requestor.put(options) }
 
-    public async checkCaptchaRequirement(): Promise<boolean>{
+    /*public async checkCaptchaRequirement(): Promise<boolean>{
         throw new NotImplemented()
     }
 
     public async checkUsernameAvailability(name: string): Promise<boolean> {
         throw new NotImplemented()
-    }
+    }*/
     
     public async composeMessage(options: ComposeMessageParams): Promise<any>{
         throw new NotImplemented()
@@ -115,7 +115,9 @@ export default class traw{
     }
     
     public async getMe(): Promise<RedditUser>{
-        throw new NotImplemented()
+        const result = await this.get({url: 'api/v1/me'});
+        this._ownUserInfo = new RedditUser( result.data, this, true);
+        return this._ownUserInfo;
     }
     
     public async getMessage(messageId: string): Promise<PrivateMessage>{
@@ -270,9 +272,9 @@ export default class traw{
         throw new NotImplemented()
     }
     
-    public async revokeRefreshToken(): Promise<void>{
+    /*public async revokeRefreshToken(): Promise<void>{
         throw new NotImplemented()
-    }
+    }*/
     
     public async search(options: SearchOptions): Promise<Listing<Submission>>{
         throw new NotImplemented()
@@ -290,6 +292,20 @@ export default class traw{
         throw new NotImplemented()
     }
     
+    public async submitCrosspost ({originalPost, subredditName,title,url, ...options}
+        : {originalPost: Submission | string, subredditName: string, title: string, url: string}) {
+        return this.#submit({
+          ...options,
+          subredditName,
+          title,
+          url,
+          kind: 'crosspost',
+          crosspost_fullname: originalPost instanceof Submission
+            ? originalPost.name
+            : addFullnamePrefix(originalPost, 't3_')
+        });
+    }
+
     public async submitLink(options: SubmitLinkOptions): Promise<Submission>{
         throw new NotImplemented()
     }
@@ -302,9 +318,9 @@ export default class traw{
         throw new NotImplemented()
     }*/
      
-    public async updateAccessToken(): Promise<string>{
+    /*public async updateAccessToken(): Promise<string>{
         throw new NotImplemented()
-    }
+    }*/
     
     public async updatePreferences(updatedPreferences: any): Promise<void>{
         throw new NotImplemented()
@@ -325,8 +341,51 @@ export default class traw{
             })
         }
     }
-  
 
+    public async assignFlair ({css_class, link, name, text, subreddit_name} : {
+        css_class: string, link: string, name?: string, text: string, subreddit_name: string
+    }) {
+        return this.post({url: `r/${subreddit_name}/api/flair`, form: {api_type, name, text, link, css_class}});
+    }
+
+    public async selectFlair ({flair_template_id, link, name, text, subredditName} :
+        {flair_template_id: string, link: string, name?: string, text?: string, subredditName: string}) {
+        return this.post({url: `r/${subredditName}/api/selectflair`, form: {api_type, flair_template_id, link, name, text}});
+    }
+
+    async #submit (options: SubmitOptions){
+        throw new NotImplemented()
+    }
+
+    public async getMyName () {
+        return this._ownUserInfo ? this._ownUserInfo.name : (await this.getMe()).name;
+    }
+
+}
+
+export interface SubmitOptions{
+    subredditName: string;
+    kind: string;
+    title: string;
+    url: string;
+    videoPosterUrl?: string;
+    websocketUrl?: string;
+    gallery?: string;
+    rtjson?: string;
+    choices?: string; // no idea
+    duration?: string; // no idea
+    crosspost_fullname?: string;
+    sendReplies?: boolean;
+    resubmit?: boolean;
+    captchaIden?: string;
+    captchaResponse?: string;
+    nsfw?: boolean;
+    spoiler?: boolean;
+    flairId?: string;
+    flairText?: string;
+    text?: string;
+    collectionId?: string;
+    discussionType?: string
 }
 
 export interface SubmitLinkOptions {
