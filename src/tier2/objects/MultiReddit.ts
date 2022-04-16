@@ -65,7 +65,7 @@ export default class MultiReddit extends RedditContent<MultiReddit> {
 	}
 
 	public async edit(options: MultiRedditProperties): Promise<this> {
-		const display_name = options.name?.length ? name : this.name;
+		const display_name = options.name?.length ? options.name : this.name;
 
 		throw new NotImplemented();
 

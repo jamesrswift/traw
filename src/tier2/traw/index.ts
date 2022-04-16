@@ -4,7 +4,6 @@ import Subreddit, { Sort, SubredditSettings } from "../objects/Subreddit";
 import Comment from "../objects/Comment";
 import PrivateMessage from "../objects/PrivateMessage";
 import { addFullnamePrefix } from "./helpers";
-import RedditOwnUser from "../objects/RedditUser/RedditOwnUser";
 import { api_type, MAX_LISTING_ITEMS } from "../../tier0/constants";
 import Listing, { ListingOptions, SortedListingOptions } from "../objects/Listing";
 import { NotImplemented } from "../../tier0/exceptions";

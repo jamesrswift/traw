@@ -77,6 +77,10 @@ export default class ModmailConversation extends RedditContent<ModmailConversati
 	static conversationStates: conversationStates;
 	static modActionStats: modActionStates;
 
+	public get name () {
+		return this.id;
+	}
+
 	public async reply(
 		body: string,
 		isAuthorHidden?: boolean,
@@ -86,42 +90,51 @@ export default class ModmailConversation extends RedditContent<ModmailConversati
 	}
 
 	public async getParticipant(): Promise<ModmailConversationAuthor> {
-		throw new NotImplemented();
+		const res = await this.get({url: `api/mod/conversations/${this.id}/user`});
+    	return new ModmailConversationAuthor( res, this.traw, true);
 	}
 
 	public async isRead(): Promise<boolean> {
-		throw new NotImplemented();
+		return this.lastUnread === null;
 	}
 
 	public async read(): Promise<this> {
-		throw new NotImplemented();
+		this.traw.markNewModmailConversationsAsRead([this]);
+		return this
 	}
 
 	public async unread(): Promise<this> {
-		throw new NotImplemented();
+		this.traw.markNewModmailConversationsAsUnread([this]);
+		return this
 	}
 
 	public async mute(): Promise<this> {
-		throw new NotImplemented();
+		await this.post({url: `api/mod/conversations/${this.id}/mute`});
+		return this
 	}
 
 	public async unmute(): Promise<this> {
-		throw new NotImplemented();
+		await this.post({url: `api/mod/conversations/${this.id}/unmute`});
+		return this
 	}
 
 	public async highlight(): Promise<this> {
-		throw new NotImplemented();
+		await this.post({url: `api/mod/conversations/${this.id}/highlight`});;
+		return this
 	}
 
 	public async unhighlight(): Promise<this> {
-		throw new NotImplemented();
+		await this.traw.delete({url: `api/mod/conversations/${this.id}/highlight`});
+		return this
 	}
 
 	public async archive(): Promise<this> {
-		throw new NotImplemented();
+		await this.post({url: `api/mod/conversations/${this.id}/archive`});
+		return this
 	}
 
 	public async unarchive(): Promise<this> {
-		throw new NotImplemented();
+		await this.post({url: `api/mod/conversations/${this.id}/unarchive`});;
+		return this
 	}
 }
