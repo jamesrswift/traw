@@ -74,11 +74,11 @@ export default class WikiPage extends RedditContent<WikiPage>{
     }
 
     public async getDiscussions(options?: ListingOptions): Promise<Listing<Submission>> {
-        return this.getListing({uri: `r/${this.subreddit.display_name}/wiki/discussions/${this.title}`, qs: options});
+        return this.traw.getListing({uri: `r/${this.subreddit.display_name}/wiki/discussions/${this.title}`, qs: options});
     }
     
     public async getRevisions(options?: ListingOptions): Promise<Listing<WikiPageRevision>>{
-        return this.getListing({uri: `r/${this.subreddit.display_name}/wiki/revisions/${this.title}`, qs: options});
+        return this.traw.getListing({uri: `r/${this.subreddit.display_name}/wiki/revisions/${this.title}`, qs: options});
     }
     
     public async getSettings(): Promise<Settings>{

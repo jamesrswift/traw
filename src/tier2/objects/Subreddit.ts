@@ -354,7 +354,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		// Loadash.renameKey alternative:
 		(<any>options).user = options?.name;
 		delete options?.name;
-		return this.getListing({uri: `r/${this.display_name}/about/banned`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/banned`, qs: options});
 	}
 
 	public async getContributors(
@@ -363,7 +363,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		// Loadash.renameKey alternative:
 		(<any>options).user = options?.name;
 		delete options?.name;
-		return this.getListing({uri: `r/${this.display_name}/about/contributors`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/contributors`, qs: options});
 	}
 
 	public async getControversial(
@@ -375,7 +375,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getEdited(
 		options?: ListingOptions & { only?: "links" | "comments" }
 	): Promise<Listing<Submission | Comment>> {
-		return this.getListing({uri: `r/${this.display_name}/about/edited`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/edited`, qs: options});
 	}
 
 	public async getHot(options?: ListingOptions): Promise<Listing<Submission>>{
@@ -399,7 +399,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 			parsedOptions = {...options, mods: options!.mods!.join(',')}
 			delete parsedOptions.mods;
 		}
-		return this.getListing({uri: `r/${this.display_name}/about/log`, qs: parsedOptions});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/log`, qs: parsedOptions});
 	}
 
 	public async getModerators(options?: ListingOptions & { name?: string }): Promise<RedditUser[]>{
@@ -410,7 +410,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	}
 
 	public async getModmail(options?: ListingOptions): Promise<Listing<PrivateMessage>> {
-		return this.getListing({uri: `r/${this.display_name}/about/message/moderator`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/message/moderator`, qs: options});
 	}
 
 	public async getNewModmailConversations(
@@ -422,7 +422,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getModqueue(
 		options?: ListingOptions & { only?: "links" | "comments" }
 	): Promise<Listing<Submission | Comment>>{
-		return this.getListing({uri: `r/${this.display_name}/about/modqueue`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/modqueue`, qs: options});
 	}
 
 	public async getMutedUsers(
@@ -431,7 +431,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		// Loadash.renameKey alternative:
 		(<any>options).user = options?.name;
 		delete options?.name;
-		return this.getListing({uri: `r/${this.display_name}/about/muted`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/muted`, qs: options});
 	}
 
 	public async getMyFlair(): Promise<FlairTemplate>{
@@ -466,7 +466,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getReports(
 		options?: ListingOptions & { only?: "links" | "comments" }
 	): Promise<Listing<Submission | Comment>>{
-		return this.getListing({uri: `r/${this.display_name}/about/reports`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/reports`, qs: options});
 	}
 
 	public async getRising(options?: ListingOptions): Promise<Listing<Submission>>{
@@ -490,7 +490,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getSpam(
 		options?: ListingOptions & { only?: "links" | "comments" }
 	): Promise<Listing<Submission | Comment>>{
-		return this.getListing({uri: `r/${this.display_name}/about/spam`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/spam`, qs: options});
 	}
 
 	public async getSticky(num?: number ): Promise<Submission>{
@@ -525,7 +525,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getUnmoderated(
 		options?: ListingOptions & { only?: "links" | "comments" }
 	): Promise<Listing<Submission | Comment>>{
-		return this.getListing({uri: `r/${this.display_name}/about/unmoderated`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/unmoderated`, qs: options});
 	}
 
 	public async getUserFlair(name: string): Promise<FlairTemplate> {
@@ -539,7 +539,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getUserFlairList(
 		options?: ListingOptions & { name?: string }
 	): Promise<Listing<UserFlair>>{
-		return this.getListing({uri: `r/${this.display_name}/api/flairlist`, qs: options, _transform: (response : any)=> {
+		return this.traw.getListing({uri: `r/${this.display_name}/api/flairlist`, qs: options, _transform: (response : any)=> {
 		  /**
 		   * For unknown reasons, responses from the api/flairlist endpoint are formatted differently than responses from all other
 		   * Listing endpoints. Most Listing endpoints return an object with a `children` property containing the Listing's children,
@@ -569,7 +569,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		// Loadash.renameKey alternative:
 		(<any>options).user = options?.name;
 		delete options?.name;
-		return this.getListing({uri: `r/${this.display_name}/about/wikibanned`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/wikibanned`, qs: options});
 	}
 
 	public async getWikiContributors(
@@ -578,7 +578,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 		// Loadash.renameKey alternative:
 		(<any>options).user = options?.name;
 		delete options?.name;
-		return this.getListing({uri: `r/${this.display_name}/about/wikicontributors`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/about/wikicontributors`, qs: options});
 	}
 
 	public getWikiPage(title: string): WikiPage{
@@ -596,7 +596,7 @@ export default class Subreddit extends RedditContent<Subreddit> {
 	public async getWikiRevisions(
 		options?: ListingOptions
 	): Promise<Listing<WikiPageRevision>>{
-		return this.getListing({uri: `r/${this.display_name}/wiki/revisions`, qs: options});
+		return this.traw.getListing({uri: `r/${this.display_name}/wiki/revisions`, qs: options});
 	}
 
 	public async hideMyFlair(): Promise<this>{

@@ -1,5 +1,7 @@
+import _ from "lodash";
 import { parse } from "url";
 import { NotImplemented } from "../../tier0/exceptions";
+import ReplyableContent from "../mixins/ReplyableContent";
 import traw from "../traw"
 import More from "./More";
 
@@ -49,7 +51,16 @@ export default class Listing<Type> extends Array<Type> {
 
     constructor(options: any, traw: traw){
         super();
-		this.push( ...options.children || [] );
+		for ( let child of options.children ){
+			if ( child.kind != undefined ){
+				if ( child.kind == 't3' ){
+					// @ts-ignore
+					const submission = new Submission(child.data, traw, true)
+					console.log(this.push( <any>submission ))
+					//console.log("Inserting into listing", submission)
+				}
+			}
+		}
         this.traw = traw;
 		this._cachedLookahead = options._cachedLookahead;
 		
@@ -96,7 +107,29 @@ export default class Listing<Type> extends Array<Type> {
 	}
 
 	fetchMore(options: FetchMoreOptions): Listing<Type>{
-		throw new NotImplemented()
+		const parsedOptions = _.defaults(
+			typeof options === 'number' ? {amount: options} : _.clone(options),
+			// Accept either `skip_replies` or `skipReplies` for backwards compatibility.
+			{append: true, skipReplies: options.skipReplies}
+		);
+
+		if (typeof parsedOptions.amount !== 'number' || Number.isNaN(parsedOptions.amount)) {
+			throw new Error('Failed to fetch Listing. (`amount` parameter was missing or invalid)');
+		}
+
+		if (parsedOptions.amount <= 0 || this.isFinished) {
+			//@ts-ignore
+			return parsedOptions.append ? this._clone() : this._clone().empty();
+		}
+
+		if (this._cachedLookahead) {
+			const cloned = this._clone();
+			cloned.push(...cloned._cachedLookahead.splice(0, parsedOptions.amount));
+			//@ts-ignore
+			return cloned.fetchMore(parsedOptions.amount - cloned.length + this.length);
+		}
+		//@ts-ignore
+		return this._more ? this._fetchMoreComments(parsedOptions) : this._fetchMoreRegular(parsedOptions);
 	}
 
 	fetchAll(options?: FetchMoreOptions): Listing<Type>{
@@ -113,5 +146,53 @@ export default class Listing<Type> extends Array<Type> {
 		return this;
 	}
 
+	_clone ({deep = false} = {}) {
+		const properties = _.pick(this, Object.keys(INTERNAL_DEFAULTS));
+		properties._query = _.clone(properties._query);
+		properties._cachedLookahead = _.clone(properties._cachedLookahead);
+		properties._more = this._more && this._more._clone();
+		const shallowChildren = Array.from(this);
+		//@ts-ignore
+		properties.children = deep
+		//@ts-ignore
+		  ? shallowChildren.map(item => '_clone' in item && typeof item._clone === 'function' ? item._clone({deep}) : item)
+		  : shallowChildren;
+		return new Listing(properties, this.traw);
+	}
+
 }
 
+export function getEmptyRepliesListing <ArgType extends ReplyableContent<Type>, Type extends ReplyableContent<Type> >(item: ArgType) /*: Listing<Type>*/
+{
+
+	/*if ( item instanceof Comment){
+		return new Listing<Type>( {
+			uri: `comments/${(item.link_id || item.parent_id).slice(3)}`,
+			_query: {comment: item.name.slice(3), sort: item._sort},
+			_transform: undefined /* property('comments[0].replies') ,
+			_link_id: item.link_id,
+			_isCommentList: true
+		}, item.traw)
+	}
+
+	if ( item instanceof Submission ){
+		return new Listing<Type>({
+			uri: `comments/${item.id}`,
+			_transform: undefined /* property('comments') ,
+			_isCommentList: true
+		}, item.traw)
+	}
+	
+	return new Listing<Type>({}, item.traw);*/
+}
+
+export function addEmptyRepliesListing<Type extends ReplyableContent<Type>>(item: Type) {
+	throw new NotImplemented();
+	return item;
+}
+
+export function buildRepliesTree(childList: any) {
+	throw new NotImplemented();
+}
+
+import Submission from "./Submission";

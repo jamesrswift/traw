@@ -1,12 +1,11 @@
 import traw from "../traw"
-import VoteableContent, { RichTextFlair } from "../mixins/VoteableContent";
-import Listing, { ListingOptions } from "./Listing";
 import Comment from "./Comment"
 import { FlairTemplate, Sort } from "./Subreddit";
 import { AxiosResponse } from "axios";
 import { api_type } from "../../tier0/constants";
 import { addFullnamePrefix } from "../traw/helpers";
 import { NotImplemented } from "../../tier0/exceptions";
+import VoteableContent, { RichTextFlair } from "../mixins/VoteableContent";
 
 export interface Media {
 	oembed?: {
@@ -56,6 +55,7 @@ export interface SecureMediaEmbed extends MediaEmbed {
 }
 
 export default interface Submission extends VoteableContent<Submission> {
+	
 	clicked: boolean;
 	/*comments: Listing<Comment>;*/
 	/** Categories for original content, e.g. "comics", "drawing_and_painting" */
@@ -218,9 +218,9 @@ export default class Submission extends VoteableContent<Submission> {
 		if (typeof options !== "number") {
 			options.append = true;
 		}
-		const comments = await this.comments.fetchMore(options);
+		const comments = await this.replies.fetchMore(options);
 		/*this._callback({ _children: comments._children });*/
-		this.comments = comments;
+		this.replies = comments;
 		return comments;
 	}
 
@@ -240,14 +240,14 @@ export default class Submission extends VoteableContent<Submission> {
 		return comment;
 	}
 
-	public async getDuplicates(
+	/*public async getDuplicates(
 		options?: ListingOptions
 	): Promise<Listing<Submission>> {
 		return this.getListing({
 			uri: `duplicates/${this.name.slice(3)}`,
 			qs: options,
 		});
-	}
+	}*/
 
 	public async getLinkFlairTemplates(): Promise<FlairTemplate[]> {
 		await this.fetch();
@@ -365,3 +365,6 @@ export interface ImagePreview {
 	variants: any; // ?
 	id: string;
 }
+
+
+import Listing from "./Listing";

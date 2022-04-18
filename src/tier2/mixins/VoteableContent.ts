@@ -83,9 +83,6 @@ export default interface VoteableContent<Type extends VoteableContent<Type>>
 	subreddit_type: SubredditType;
 	ups: number;
 	user_reports: string[];
-
-	comments: Listing<Comment>;
-	replies: Listing<Comment>;
 }
 
 export default class VoteableContent<Type extends VoteableContent<Type>>

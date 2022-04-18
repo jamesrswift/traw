@@ -1,7 +1,6 @@
 import traw from "../traw"
 import { NotImplemented } from "../../tier0/exceptions";
 import { AxiosResponse } from "axios";
-import Listing from "../objects/Listing";
 
 export default interface RedditContent<Type extends RedditContent<Type>>{
     created_utc: number;
@@ -55,10 +54,6 @@ export default abstract class RedditContent<Type extends RedditContent<Type>>{
 
     public clone(deep: boolean = false) : Type {
         throw new NotImplemented();
-    }
-    
-    public async getListing<Type>(options: any) : Promise<Listing<Type>>{
-        return await this.traw.getListing<Type>(options)
     }
 
     public get uri () : string {

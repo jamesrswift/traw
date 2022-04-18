@@ -24,38 +24,7 @@ export function handleJsonErrors(response: AxiosResponse<any,any>) {
 	}
 }
 
-export function getEmptyRepliesListing <ArgType extends ReplyableContent<Type>, Type extends ReplyableContent<Type> >(item: ArgType) : Listing<Type>
-{
 
-	if ( item instanceof Comment){
-		return new Listing<Type>( {
-			uri: `comments/${(item.link_id || item.parent_id).slice(3)}`,
-			_query: {comment: item.name.slice(3), sort: item._sort},
-			_transform: undefined /* property('comments[0].replies') */,
-			_link_id: item.link_id,
-			_isCommentList: true
-		}, item.traw)
-	}
-
-	if ( item instanceof Submission ){
-		return new Listing<Type>({
-			uri: `comments/${item.id}`,
-			_transform: undefined /* property('comments') */,
-			_isCommentList: true
-		}, item.traw)
-	}
-	
-	return new Listing<Type>({}, item.traw);
-  }
-
-export function addEmptyRepliesListing<Type extends ReplyableContent<Type>>(item: Type) {
-	throw new NotImplemented();
-	return item;
-}
-
-export function buildRepliesTree(childList: any) {
-	throw new NotImplemented();
-}
 
 /**
 * @summary Formats permissions into a '+'/'-' string

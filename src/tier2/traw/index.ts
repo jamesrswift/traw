@@ -654,10 +654,17 @@ export default class traw {
 				this
 			).fetchMore(qs.limit ?? MAX_LISTING_ITEMS);
 		} else {
+            // @ts-ignore
 			return this.get({ url: uri, params: mergedQuery }).then(
 				(listing) => {
-					throw new NotImplemented();
-					/*return listing*/
+                    //console.log( "tra.getList<Type>", listing)
+
+                    return new Listing<Type>( listing.data.data as Partial<Listing<Type>>, this )
+                    
+					/*if (Array.isArray(listing)) {
+                        listing.filter(item => item.constructor._name === 'Comment').forEach(addEmptyRepliesListing);
+                    }
+                    return listing;*/
 				}
 			);
 		}

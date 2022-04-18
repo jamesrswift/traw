@@ -28,10 +28,10 @@ export default class Comment extends VoteableContent<Comment> {
 
         if ( _hasFetched ){
 
-            if ( this.replies instanceof Listing ){
+            /*if ( this.replies instanceof Listing ){
 
             }
-
+*/
         }
     }
 

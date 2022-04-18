@@ -81,7 +81,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	}
 
 	public async getComments(options?: any): Promise<Listing<Comment>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/comments`,
 			qs: options,
 		});
@@ -90,7 +90,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getDownvotedContent(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/downvoted`,
 			qs: options,
 		});
@@ -103,7 +103,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getGildedContent(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/gilded`,
 			qs: options,
 		});
@@ -112,7 +112,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getHiddenContent(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/hidden`,
 			qs: options,
 		});
@@ -134,7 +134,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getOverview(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/overview`,
 			qs: options,
 		});
@@ -143,11 +143,11 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getSavedContent(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({ uri: `user/${this.name}/saved`, qs: options });
+		return this.traw.getListing({ uri: `user/${this.name}/saved`, qs: options });
 	}
 
 	public async getSubmissions(options?: any): Promise<Listing<Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/submitted`,
 			qs: options,
 		});
@@ -160,7 +160,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	public async getUpvotedContent(
 		options?: any
 	): Promise<Listing<Comment | Submission>> {
-		return this.getListing({
+		return this.traw.getListing({
 			uri: `user/${this.name}/upvoted`,
 			qs: options,
 		});

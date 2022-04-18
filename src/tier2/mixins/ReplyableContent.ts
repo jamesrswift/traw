@@ -1,5 +1,6 @@
 import { api_type } from "../../tier0/constants";
 import { NotImplemented } from "../../tier0/exceptions";
+
 import { Sort } from "../objects/Subreddit";
 import RedditContent from "./RedditContent";
 
@@ -7,6 +8,7 @@ export default interface ReplyableContent<
 Type extends ReplyableContent<Type>
 > extends RedditContent<Type> {
 	_sort: Sort
+	replies: Listing<Comment | PrivateMessage>;
 }
 
 export default class ReplyableContent<
@@ -63,3 +65,7 @@ export default class ReplyableContent<
 		return this;
 	}
 }
+
+
+import { Listing } from "../objects";
+import PrivateMessage from "../objects/PrivateMessage";
