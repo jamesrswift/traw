@@ -55,30 +55,30 @@ export default class traw {
     }*/
 
 	public async composeMessage(options: ComposeMessageParams): Promise<this> {
-		let parsedTo = options.to;
-		let parsedFromSr = options.fromSubreddit;
-		if (options.to instanceof RedditUser) {
-			parsedTo = options.to.name;
-		} else if (options.to instanceof Subreddit) {
-			parsedTo = `/r/${options.to.display_name}`;
-		}
+        const ParsedOptions : any = {
+            api_type,
+            to : options.to,
+            subject: options.subject,
+            text: options.text
+        }
 
-		if (options.fromSubreddit instanceof Subreddit) {
-			parsedFromSr = options.fromSubreddit.display_name;
-		} else if (typeof options.fromSubreddit === "string") {
-			parsedFromSr = options.fromSubreddit.replace(/^\/?r\//, ""); // Convert '/r/subreddit_name' to 'subreddit_name'
-		}
+        if ( options.to instanceof RedditUser ){
+            ParsedOptions.to = options.to.name;
+        } else if ( options.to instanceof Subreddit ){
+            ParsedOptions.to = `/r/${options.to.display_name}`;
+        }
+
+        if ( options.fromSubreddit != undefined){
+            if ( options.fromSubreddit instanceof Subreddit ){
+                ParsedOptions.from_sr = options.fromSubreddit.display_name;
+            } else if (typeof options.fromSubreddit === "string") {
+                ParsedOptions.from_sr = options.fromSubreddit.replace(/^\/?r\//, ""); // Convert '/r/subreddit_name' to 'subreddit_name'
+            }
+        }
+
 		const result = await this.post({
 			url: "api/compose",
-			form: {
-				api_type,
-				/*captcha: options.captcha ?? null ,
-				iden: options.captchaIden ?? null ,*/
-				//from_sr: parsedFromSr ?? null ,
-				subject: options.subject ?? null ,
-				text: options.text ?? null ,
-				to: parsedTo ?? null ,
-			},
+			form: ParsedOptions,
 		});
 		handleJsonErrors(result);
 		return this;
