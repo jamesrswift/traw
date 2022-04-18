@@ -54,6 +54,18 @@ export default class traw {
         throw new NotImplemented()
     }*/
 
+    /**
+     * @summary Composes a new private message
+     * @example ```typescript
+     * instance.composeMessage({
+     *   to: 'actually_an_aardvark',
+     *   subject: "Hi, how's it going?",
+     *   text: 'Long time no see'
+     * })
+     * // (message created on reddit)
+     * ```
+     */
+
 	public async composeMessage(options: ComposeMessageParams): Promise<this> {
         const ParsedOptions : any = {
             api_type,
@@ -771,13 +783,17 @@ export interface SubmitSelfPostOptions {
 }
 
 export interface ComposeMessageParams {
+    /** Destination of the message, be it a user, or a subreddit's modmail */
 	to: RedditUser | Subreddit | string;
+
+    /** Subject of the message to be sent, in plain text */
 	subject: string;
+
+    /** Body of the message to be sent, in plain text */
 	text: string;
+
+    /** Optionally, the subreddit from which the message is being sent, as a Subreddit object, or as a string  of the subreddit's display name with or without prefix */
 	fromSubreddit?: Subreddit | string;
-	captchaIden?: string; // @deprecated
-	captchaResponse?: string; // @deprecated
-	captcha?: string; // @deprecated
 }
 
 export interface BaseSearchOptions {

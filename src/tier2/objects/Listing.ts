@@ -1,7 +1,7 @@
 import { parse } from "url";
 import { NotImplemented } from "../../tier0/exceptions";
 import traw from "../traw"
-import More from "./more";
+import More from "./More";
 
 export interface ListingOptions {
 	limit?: number;
