@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import _ from "lodash";
 import { LIVETHREAD_PERMISSIONS, MODERATOR_PERMISSIONS } from "../../tier0/constants";
 import { NotImplemented } from "../../tier0/exceptions";
 import ReplyableContent from "../mixins/ReplyableContent";
@@ -17,10 +18,10 @@ export function addFullnamePrefix(item: string | any, prefix: string) {
 	return item.name;
 }
 
-export function handleJsonErrors(response: any) {
-	/*if (!isEmpty(response) && !isEmpty(response.json.errors)) {
-		throw new Error(response.json.errors[0]);
-	}*/
+export function handleJsonErrors(response: AxiosResponse<any,any>) {
+	if (!_.isEmpty(response) && !_.isEmpty(response.data.json.errors)) {
+		throw new Error(response.data.json.errors[0]);
+	}
 }
 
 export function getEmptyRepliesListing <ArgType extends ReplyableContent<Type>, Type extends ReplyableContent<Type> >(item: ArgType) : Listing<Type>

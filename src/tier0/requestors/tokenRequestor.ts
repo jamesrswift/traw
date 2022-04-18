@@ -4,7 +4,7 @@ import { axiosCreate, AxiosRequestConfig } from "../http";
 import userAgent from "../useragent";
 import credentialedRequestor from "./credentialedRequestor";
 import { util } from "chai";
-import { updateAccessTokenError } from "../exceptions";
+import { NotImplemented, updateAccessTokenError } from "../exceptions";
 import { AxiosInstance } from "axios";
 
 export interface credentialsResponse {
@@ -49,10 +49,15 @@ export default class tokenRequestor extends baseRequestor{
             }
         })
 
-        const res = await instance.request(config);
-        this.handleRateLimitResponse(res)
-
-        return res
+        let res;
+        try {
+            res = await instance.request(config);
+            this.handleRateLimitResponse(res)
+            return res
+        } catch ( e: any) {
+            console.log( e )
+            throw new NotImplemented()
+        }
     }
 
     async validateAccessToken( ) : Promise<bearer_authentication>{

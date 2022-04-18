@@ -54,7 +54,7 @@ export default class traw {
         throw new NotImplemented()
     }*/
 
-	public async composeMessage(options: ComposeMessageParams): Promise<any> {
+	public async composeMessage(options: ComposeMessageParams): Promise<this> {
 		let parsedTo = options.to;
 		let parsedFromSr = options.fromSubreddit;
 		if (options.to instanceof RedditUser) {
@@ -72,16 +72,16 @@ export default class traw {
 			url: "api/compose",
 			form: {
 				api_type,
-				captcha: options.captcha,
-				iden: options.captchaIden,
-				from_sr: parsedFromSr,
-				subject: options.subject,
-				text: options.text,
-				to: parsedTo,
+				/*captcha: options.captcha ?? null ,
+				iden: options.captchaIden ?? null ,*/
+				//from_sr: parsedFromSr ?? null ,
+				subject: options.subject ?? null ,
+				text: options.text ?? null ,
+				to: parsedTo ?? null ,
 			},
 		});
 		handleJsonErrors(result);
-		return {};
+		return this;
 	}
 
 	/*public async config(opts?: ConfigOptions): ConfigOptions{
@@ -146,9 +146,12 @@ export default class traw {
     }*/
 
 	public async getBlockedUsers(): Promise<RedditUser[]> {
-		throw new NotImplemented();
-		// @ts-ignore
-		return this.get({ url: "prefs/blocked" });
+        const blocked = (await this.get({ url: "prefs/blocked" })).data;
+        let users : RedditUser[] = [];
+        for ( let child of blocked.data.children as Partial<RedditUser>[]) users.push(
+            new RedditUser( child, this, false)
+        )
+		return users
 	}
 
 	/*public async getCaptchaImage(identifier: string): Promise<string> {

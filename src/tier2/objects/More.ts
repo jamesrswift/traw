@@ -20,6 +20,10 @@ export default class More {
     }
 
     public async fetchMore(options: MorefetchMoreOptions, startIndex: number = 0, children: any = {}, nested: boolean = false ){
+        
+        throw new NotImplemented()
+        
+        /*
         if ( options.amount <= 0 || startIndex >= this.children.length ){
             return [];
         }
@@ -37,10 +41,14 @@ export default class More {
         if (!nested) {
         res._children = children;
         }
-        return res;
+        return res;*/
     }
 
     async fetchTree (options: MorefetchMoreOptions, startIndex: number = 0, children: any = {}, nested: boolean = false ) {
+        throw new NotImplemented()
+        
+        /*
+        
         if (options.amount <= 0 || startIndex >= this.children.length) {
             return [];
         }
@@ -51,13 +59,13 @@ export default class More {
         });
         handleJsonErrors(res);
         let resultTrees = buildRepliesTree(res.data.json.data.things.map(addEmptyRepliesListing));
-        Object.assign(children, res._children);
+        Object.assign(children, res._children);*/
         /**
          * Sometimes, when sending a request to reddit to get multiple comments from a `more` object, reddit decides to only
          * send some of the requested comments, and then stub out the remaining ones in a smaller `more` object. ( ¯\_(ツ)_/¯ )
          * In these cases, recursively fetch the smaller `more` objects as well.
          */
-        const childMores = _.remove(resultTrees, c => c instanceof More);
+        /*const childMores = _.remove(resultTrees, c => c instanceof More);
         _.forEach(childMores, c => c.link_id = this.link_id || this.parent_id);
         const expandedTrees = await Promise.all(childMores.map(c => c.fetchTree({...options, amount: Infinity}, 0, children, true)));
         const nexts = await this.fetchMore({...options, amount: options.amount - ids.length}, startIndex + ids.length, children, true);
@@ -65,7 +73,7 @@ export default class More {
         if (!nested) {
           resultTrees._children = children;
         }
-        return resultTrees;
+        return resultTrees;*/
       }
 
 
