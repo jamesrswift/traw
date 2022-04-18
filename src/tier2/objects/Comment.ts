@@ -35,8 +35,14 @@ export default class Comment extends VoteableContent<Comment> {
         }
     }
 
-    protected override transformApiResponse(response: AxiosResponse<Comment, any>): Comment {
-        throw new NotImplemented()
+    protected override transformApiResponse(response: AxiosResponse<any, any>): Comment {
+
+        if ( response.data.kind == "Listing" ){
+            Object.assign(this, response.data.data.children[0].data)
+            return this;
+        } else {
+            throw new NotImplemented()
+        }
     }
 
     override get uri(): string {

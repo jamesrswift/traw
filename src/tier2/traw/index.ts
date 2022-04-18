@@ -158,11 +158,11 @@ export default class traw {
 		throw new NotImplemented();
 	}*/
 
-	public async getComment(
+	public getComment(
 		commentId: string,
 		submissionId?: string,
 		sort?: Sort
-	): Promise<Comment> {
+	): Comment {
 		return new Comment(
 			{
 				name: addFullnamePrefix(commentId, "t1_"),
