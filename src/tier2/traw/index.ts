@@ -137,6 +137,7 @@ export default class traw {
 	public async createSubreddit(
 		options: SubredditSettings
 	): Promise<Subreddit> {
+        // @ts-ignore
 		return this.#createOrEditSubreddit(options);
 	}
 
@@ -449,21 +450,26 @@ export default class traw {
 		subredditName?: string,
 		options?: ListingOptions
 	): Promise<Listing<Submission>> {
-		throw new NotImplemented();
+		return this.#getSortedFrontpage('rising', subredditName, options);
 	}
 
 	public async getSavedCategories(): Promise<any[]> {
-		throw new NotImplemented();
+		const res = await this.get({url: 'api/saved_categories'});
+        throw new NotImplemented();
+        // @ts-ignore
+        return res.categories;
 	}
 
 	public async getSentMessages(
 		options?: ListingOptions
 	): Promise<Listing<PrivateMessage>> {
-		throw new NotImplemented();
+		return this.getListing({uri: 'message/sent', qs: options});
 	}
 
 	public async getStickiedLivethread(): Promise<LiveThread | undefined> {
 		throw new NotImplemented();
+        // @ts-ignore
+        return this.get({url: 'api/live/happening_now'});
 	}
 
 	public async getSubmission(
@@ -484,20 +490,20 @@ export default class traw {
 	public async getSubscriptions(
 		options?: ListingOptions
 	): Promise<Listing<Subreddit>> {
-		throw new NotImplemented();
+		return this.getListing({uri: 'subreddits/mine/subscriber', qs: options});
 	}
 
 	public async getTop(
 		subredditName?: string,
 		options?: SortedListingOptions
 	): Promise<Listing<Submission>> {
-		throw new NotImplemented();
+		return this.#getSortedFrontpage('top', subredditName, options);
 	}
 
 	public async getUnreadMessages(
 		options?: ListingOptions
 	): Promise<Listing<PrivateMessage>> {
-		throw new NotImplemented();
+		return this.getListing({uri: 'message/unread', qs: options});
 	}
 
 	public async getUser(name: string): Promise<RedditUser> {
@@ -508,20 +514,27 @@ export default class traw {
 		);
 	}
 
-	public async markAsVisited(links: Submission[]): Promise<void> {
-		throw new NotImplemented();
-	}
+	public async markAsVisited(links: Submission[]): Promise<this> {
+		await this.post({url: 'api/store_visits', form: {links: links.map(sub => sub.name).join(',')}});
+        return this
+    }
 
 	public async markMessagesAsRead(
 		messages: PrivateMessage[] | string[]
 	): Promise<void> {
-		throw new NotImplemented();
+		const messageIds = messages.map(message => addFullnamePrefix(message, 't4_'));
+        throw new NotImplemented();
+        // @ts-ignore
+        return this.post({url: 'api/read_message', form: {id: messageIds.join(',')}});
 	}
 
 	public async markMessagesAsUnread(
 		messages: PrivateMessage[] | string[]
 	): Promise<void> {
-		throw new NotImplemented();
+		const messageIds = messages.map(message => addFullnamePrefix(message, 't4_'));
+        throw new NotImplemented();
+        // @ts-ignore
+        return this.post({url: 'api/unread_message', form: {id: messageIds.join(',')}});
 	}
 
 	/*public async oauthRequest(options: RequestOptions): Promise<any>{
@@ -532,8 +545,9 @@ export default class traw {
         throw new NotImplemented()
     }*/
 
-	public async readAllMessages(): Promise<void> {
-		throw new NotImplemented();
+	public async readAllMessages(): Promise<this> {
+		await this.post({url: 'api/read_all_messages'});
+        return this
 	}
 
 	/*public async revokeRefreshToken(): Promise<void>{
@@ -695,6 +709,10 @@ export default class traw {
 			qs: opts,
 		});
 	}
+
+    async #createOrEditSubreddit(options: any){
+        throw new NotImplemented();
+    }
 }
 
 export interface SubmitOptions {
