@@ -38,10 +38,7 @@ export default abstract class RedditContent<Type extends RedditContent<Type>>{
         return await this.fetch();
     }
 
-    /*
-     * @deprecated
-     */
-    public toJSON(){
+    /** @deprecated */public toJSON(){
         throw new NotImplemented();
     }
 
