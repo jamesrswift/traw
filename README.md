@@ -38,7 +38,7 @@
   <p align="center">
     a Typescript Reddit API Wrapper
     <br />
-    <a href="https://github.com/jamesxx/traw"><strong>Explore the docs »</strong></a>
+    <a href="https://jamesxx.github.io/traw"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/jamesxx/traw">View Demo</a>
