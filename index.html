@@ -1,0 +1,233 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>traw</title><meta name="description" content="Documentation for traw"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">traw</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>traw </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><div id="top"></div>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
+
+
+
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+<p><a href="https://github.com/jamesxx/traw/graphs/contributors"><img src="https://img.shields.io/github/contributors/jamesxx/traw.svg?style=for-the-badge" alt="Contributors"></a>
+<a href="https://github.com/jamesxx/traw/network/members"><img src="https://img.shields.io/github/forks/jamesxx/traw.svg?style=for-the-badge" alt="Forks"></a>
+<a href="https://github.com/jamesxx/traw/stargazers"><img src="https://img.shields.io/github/stars/jamesxx/traw.svg?style=for-the-badge" alt="Stargazers"></a>
+<a href="https://github.com/jamesxx/traw/issues"><img src="https://img.shields.io/github/issues/jamesxx/traw.svg?style=for-the-badge" alt="Issues"></a>
+<a href="https://github.com/jamesxx/traw/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/jamesxx/traw.svg?style=for-the-badge" alt="MIT License"></a>
+<a href="https://linkedin.com/in/othneildrew"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="LinkedIn"></a></p>
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="images/logo.png" alt="Logo" height="80">
+  </a>
+
+  <h3 align="center">TRAW</h3>
+
+  <p align="center">
+    a Typescript Reddit API Wrapper
+    <br />
+    <a href="https://github.com/jamesxx/traw"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/jamesxx/traw">View Demo</a>
+    ·
+    <a href="https://github.com/othneildrew/jamesxx/traw">Report Bug</a>
+    ·
+    <a href="https://github.com/jamesxx/traw/issues">Request Feature</a>
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+
+<a href="#about-the-project" id="about-the-project" style="color: inherit; text-decoration: none;">
+  <h2>About The Project</h2>
+</a>
+<!--  [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+
+<p>TRAW is a typescript reddit API wrapper, a successor to  <a href="https://github.com/not-an-aardvark/snoowrap">Snoowrap by Not An aardvark</a>. The main drive to start the project was to address the lack of maintenance on snoowrap, leading to out-of-date functions, and secondly, to address potential security concerns arrising from the modules upon which it relied. The opportunity was also taken to incorporate type safety by moving from javascript to typescript, leading hopefully to greater reliability presently and in the future, as well as improving the end-developer&#39;s experience by making some function calls more intuitive.</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+
+<a href="#built-with" id="built-with" style="color: inherit; text-decoration: none;">
+  <h3>Built With</h3>
+</a>
+<p>This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.</p>
+<ul>
+<li><a href="https://axios-http.com/">Axios</a></li>
+<li><a href="https://typescriptlang.org/">Typescript</a></li>
+<li><p align="right">(<a href="#top">back to top</a>)</p></li>
+</ul>
+<!-- GETTING STARTED -->
+
+<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+  <h2>Getting Started</h2>
+</a>
+<p>This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.</p>
+
+<a href="#prerequisites" id="prerequisites" style="color: inherit; text-decoration: none;">
+  <h3>Prerequisites</h3>
+</a>
+<p>This is an example of how to list things you need to use the software and how to install them.</p>
+<ul>
+<li>npm<pre><code class="language-sh"><span class="hl-0">npm install npm@latest -g</span>
+</code></pre>
+</li>
+</ul>
+
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h3>Installation</h3>
+</a>
+<p><em>Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn&#39;t rely on any external dependencies or services.</em></p>
+<ol>
+<li>Get a free API Key at <a href="https://example.com">https://example.com</a></li>
+<li>Clone the repo<pre><code class="language-sh"><span class="hl-0">git clone https://github.com/your_username_/Project-Name.git</span>
+</code></pre>
+</li>
+<li>Install NPM packages<pre><code class="language-sh"><span class="hl-0">npm install</span>
+</code></pre>
+</li>
+<li>Enter your API in <code>config.js</code><pre><code class="language-js"><span class="hl-1">const</span><span class="hl-0"> </span><span class="hl-2">API_KEY</span><span class="hl-0"> = </span><span class="hl-3">&#39;ENTER YOUR API&#39;</span><span class="hl-0">;</span>
+</code></pre>
+</li>
+</ol>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- USAGE EXAMPLES -->
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+<p>Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.</p>
+<p><em>For more examples, please refer to the <a href="https://example.com">Documentation</a></em></p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- ROADMAP -->
+
+<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
+  <h2>Roadmap</h2>
+</a>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Add Changelog</li>
+<li><input checked="" disabled="" type="checkbox"> Add back to top links</li>
+<li><input disabled="" type="checkbox"> Add Additional Templates w/ Examples</li>
+<li><input disabled="" type="checkbox"> Add &quot;components&quot; document to easily copy &amp; paste sections of the readme</li>
+<li><input disabled="" type="checkbox"> Multi-language Support<ul>
+<li><input disabled="" type="checkbox"> Chinese</li>
+<li><input disabled="" type="checkbox"> Spanish</li>
+</ul>
+</li>
+</ul>
+<p>See the <a href="https://github.com/othneildrew/Best-README-Template/issues">open issues</a> for a full list of proposed features (and known issues).</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- CONTRIBUTING -->
+
+<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+  <h2>Contributing</h2>
+</a>
+<p>Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are <strong>greatly appreciated</strong>.</p>
+<p>If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag &quot;enhancement&quot;.
+Don&#39;t forget to give the project a star! Thanks again!</p>
+<ol>
+<li>Fork the Project</li>
+<li>Create your Feature Branch (<code>git checkout -b feature/AmazingFeature</code>)</li>
+<li>Commit your Changes (<code>git commit -m &#39;Add some AmazingFeature&#39;</code>)</li>
+<li>Push to the Branch (<code>git push origin feature/AmazingFeature</code>)</li>
+<li>Open a Pull Request</li>
+</ol>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
+</a>
+<p>Distributed under the MIT License. See <code>LICENSE.txt</code> for more information.</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+
+<a href="#contact" id="contact" style="color: inherit; text-decoration: none;">
+  <h2>Contact</h2>
+</a>
+<p>Your Name - <a href="https://twitter.com/your_username">@your_twitter</a> - <a href="mailto:email@example.com">email@example.com</a></p>
+<p>Project Link: <a href="https://github.com/your_username/repo_name">https://github.com/your_username/repo_name</a></p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- ACKNOWLEDGMENTS -->
+
+<a href="#acknowledgments" id="acknowledgments" style="color: inherit; text-decoration: none;">
+  <h2>Acknowledgments</h2>
+</a>
+<p>Use this space to list resources you find helpful and would like to give credit to. I&#39;ve included a few of my favorites to kick things off!</p>
+<ul>
+<li><a href="https://choosealicense.com">Choose an Open Source License</a></li>
+<li><a href="https://www.webpagefx.com/tools/emoji-cheat-sheet">GitHub Emoji Cheat Sheet</a></li>
+<li><a href="https://flexbox.malven.co/">Malven&#39;s Flexbox Cheatsheet</a></li>
+<li><a href="https://grid.malven.co/">Malven&#39;s Grid Cheatsheet</a></li>
+<li><a href="https://shields.io">Img Shields</a></li>
+<li><a href="https://pages.github.com">GitHub Pages</a></li>
+<li><a href="https://fontawesome.com">Font Awesome</a></li>
+<li><a href="https://react-icons.github.io/react-icons/search">React Icons</a></li>
+</ul>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-enum"><a href="enums/NoteLabel.html" class="tsd-kind-icon">Note<wbr/>Label</a></li><li class="tsd-kind-enum"><a href="enums/NoteType.html" class="tsd-kind-icon">Note<wbr/>Type</a></li><li class="tsd-kind-enum"><a href="enums/conversationStates.html" class="tsd-kind-icon">conversation<wbr/>States</a></li><li class="tsd-kind-enum"><a href="enums/modActionStates.html" class="tsd-kind-icon">mod<wbr/>Action<wbr/>States</a></li><li class="tsd-kind-class"><a href="classes/Comment.html" class="tsd-kind-icon">Comment</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Listing.html" class="tsd-kind-icon">Listing</a></li><li class="tsd-kind-class"><a href="classes/MediaGif.html" class="tsd-kind-icon">Media<wbr/>Gif</a></li><li class="tsd-kind-class"><a href="classes/MediaImg.html" class="tsd-kind-icon">Media<wbr/>Img</a></li><li class="tsd-kind-class"><a href="classes/MediaVideo.html" class="tsd-kind-icon">Media<wbr/>Video</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/RedditContent.html" class="tsd-kind-icon">Reddit<wbr/>Content</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/ReplyableContent.html" class="tsd-kind-icon">Replyable<wbr/>Content</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/VoteableContent.html" class="tsd-kind-icon">Voteable<wbr/>Content</a></li><li class="tsd-kind-class"><a href="classes/traw.html" class="tsd-kind-icon">traw</a></li><li class="tsd-kind-interface"><a href="interfaces/Author.html" class="tsd-kind-icon">Author</a></li><li class="tsd-kind-interface"><a href="interfaces/BanStatus.html" class="tsd-kind-icon">Ban<wbr/>Status</a></li><li class="tsd-kind-interface"><a href="interfaces/BaseSearchOptions.html" class="tsd-kind-icon">Base<wbr/>Search<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/ComposeMessageParams.html" class="tsd-kind-icon">Compose<wbr/>Message<wbr/>Params</a></li><li class="tsd-kind-interface"><a href="interfaces/FetchMoreOptions.html" class="tsd-kind-icon">Fetch<wbr/>More<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/FileInfo.html" class="tsd-kind-icon">File<wbr/>Info</a></li><li class="tsd-kind-interface"><a href="interfaces/FlairTemplate.html" class="tsd-kind-icon">Flair<wbr/>Template</a></li><li class="tsd-kind-interface"><a href="interfaces/ImagePreview.html" class="tsd-kind-icon">Image<wbr/>Preview</a></li><li class="tsd-kind-interface"><a href="interfaces/ImagePreviewSource.html" class="tsd-kind-icon">Image<wbr/>Preview<wbr/>Source</a></li><li class="tsd-kind-interface"><a href="interfaces/ListingOptions.html" class="tsd-kind-icon">Listing<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/LiveThreadSettings.html" class="tsd-kind-icon">Live<wbr/>Thread<wbr/>Settings</a></li><li class="tsd-kind-interface"><a href="interfaces/Media.html" class="tsd-kind-icon">Media</a></li><li class="tsd-kind-interface"><a href="interfaces/MediaEmbed.html" class="tsd-kind-icon">Media<wbr/>Embed</a></li><li class="tsd-kind-interface"><a href="interfaces/ModAction.html" class="tsd-kind-icon">Mod<wbr/>Action</a></li><li class="tsd-kind-interface"><a href="interfaces/ModmailMessage.html" class="tsd-kind-icon">Modmail<wbr/>Message</a></li><li class="tsd-kind-interface"><a href="interfaces/MultiRedditProperties.html" class="tsd-kind-icon">Multi<wbr/>Reddit<wbr/>Properties</a></li><li class="tsd-kind-interface"><a href="interfaces/ObjId.html" class="tsd-kind-icon">Obj<wbr/>Id</a></li><li class="tsd-kind-interface"><a href="interfaces/Owner.html" class="tsd-kind-icon">Owner</a></li><li class="tsd-kind-interface"><a href="interfaces/RecentComment.html" class="tsd-kind-icon">Recent<wbr/>Comment</a></li><li class="tsd-kind-interface"><a href="interfaces/RecentConvo.html" class="tsd-kind-icon">Recent<wbr/>Convo</a></li><li class="tsd-kind-interface"><a href="interfaces/RecentPost.html" class="tsd-kind-icon">Recent<wbr/>Post</a></li><li class="tsd-kind-interface"><a href="interfaces/SearchOptions.html" class="tsd-kind-icon">Search<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/SecureMediaEmbed.html" class="tsd-kind-icon">Secure<wbr/>Media<wbr/>Embed</a></li><li class="tsd-kind-interface"><a href="interfaces/SortedListingOptions.html" class="tsd-kind-icon">Sorted<wbr/>Listing<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/SubmitLinkOptions.html" class="tsd-kind-icon">Submit<wbr/>Link<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/SubmitOptions.html" class="tsd-kind-icon">Submit<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/SubmitSelfPostOptions.html" class="tsd-kind-icon">Submit<wbr/>Self<wbr/>Post<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/SubredditSettings.html" class="tsd-kind-icon">Subreddit<wbr/>Settings</a></li><li class="tsd-kind-interface"><a href="interfaces/Trophy.html" class="tsd-kind-icon">Trophy</a></li><li class="tsd-kind-interface"><a href="interfaces/WikiPageRevision.html" class="tsd-kind-icon">Wiki<wbr/>Page<wbr/>Revision</a></li><li class="tsd-kind-type-alias"><a href="modules.html#ModActionType" class="tsd-kind-icon">Mod<wbr/>Action<wbr/>Type</a></li><li class="tsd-kind-type-alias"><a href="modules.html#Sort" class="tsd-kind-icon">Sort</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#addEmptyRepliesListing" class="tsd-kind-icon">add<wbr/>Empty<wbr/>Replies<wbr/>Listing</a></li><li class="tsd-kind-function"><a href="modules.html#buildRepliesTree" class="tsd-kind-icon">build<wbr/>Replies<wbr/>Tree</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#getEmptyRepliesListing" class="tsd-kind-icon">get<wbr/>Empty<wbr/>Replies<wbr/>Listing</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li><li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li><li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
