@@ -23,26 +23,56 @@ export default interface traw {
 export default class traw {
 	constructor(protected requestor: baseRequestor) {}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public get(options: any) {
 		return this.requestor.get(options);
 	}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public delete(options: any) {
 		return this.requestor.delete(options);
 	}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public head(options: any) {
 		return this.requestor.head(options);
 	}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public patch(options: any) {
 		return this.requestor.patch(options);
 	}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public post(options: any) {
 		return this.requestor.post(options);
 	}
 
+	/**
+	 * @internal
+	 * @param options AxiosRequestConfig<any> formatted query
+	 * @returns AxiosResponse<any,any> data
+	 */
 	public put(options: any) {
 		return this.requestor.put(options);
 	}
@@ -66,7 +96,6 @@ export default class traw {
      * // (message created on reddit)
      * ```
      */
-
 	public async composeMessage(options: ComposeMessageParams): Promise<this> {
         const ParsedOptions : any = {
             api_type,
@@ -684,7 +713,7 @@ export default class traw {
 		}
 	}
 
-// #region Modnotes
+//#region Modnotes
 
 	/**
 	 * 
@@ -717,7 +746,6 @@ export default class traw {
 	 * @param note_id ID of the note to be moved, typically in the format of ModNote_{UUID}
 	 * @returns 
 	 */
-
 	public async deleteModnote(user: RedditUser | string , subreddit: Subreddit | string, note_id: string) : Promise<this>{
 		await this.delete({
 			url: '/api/mod/notes',
@@ -754,7 +782,11 @@ export default class traw {
 		return response.created
 	}
 
-// #endregion
+	public async getRecentModnotes( ){
+		throw new NotImplemented();
+	}
+
+//#endregion
 
 	public async assignFlair({
 		css_class,

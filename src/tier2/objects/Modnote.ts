@@ -94,9 +94,11 @@ export default class Modnote extends RedditContent<Modnote> {
 
 	public async delete() : Promise<void>{
 		if ( this.type != NoteType.NOTE) return;
-		await this.traw.delete({
-			url: `/api/mod/notes`
-		})
+		await this.traw.deleteModnote(
+			this.user,
+			this.subreddit,
+			this.id
+		)
 		return 
 	}
 }
