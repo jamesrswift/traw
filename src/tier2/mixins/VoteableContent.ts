@@ -85,8 +85,9 @@ export default interface VoteableContent<Type extends VoteableContent<Type>>
 	user_reports: string[];
 }
 
-export default class VoteableContent<Type extends VoteableContent<Type>>
-	extends ReplyableContent<Type> {
+export default class VoteableContent<
+	Type extends VoteableContent<Type>
+> extends ReplyableContent<Type> {
 	public async _vote(direction: number): Promise<this> {
 		await this.post({
 			url: "api/vote",
@@ -167,7 +168,10 @@ export default class VoteableContent<Type extends VoteableContent<Type>>
 
 	public async expandReplies(limit?: number, depth?: number): Promise<Type> {
 		await this.fetch();
-		return this.clone(true)._mutateAndExpandReplies(limit ?? Infinity, depth ?? Infinity )
+		return this.clone(true)._mutateAndExpandReplies(
+			limit ?? Infinity,
+			depth ?? Infinity
+		);
 	}
 
 	public async gild(): Promise<this> {

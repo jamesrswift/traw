@@ -1,66 +1,90 @@
-import traw from "../traw"
+import traw from "../traw";
 import { NotImplemented } from "../../tier0/exceptions";
 import { AxiosResponse } from "axios";
 
-export default interface RedditContent<Type extends RedditContent<Type>>{
-    created_utc: number;
-    created: number;
-    id: string;
-    name: string;
+export default interface RedditContent<Type extends RedditContent<Type>> {
+	created_utc: number;
+	created: number;
+
+	/** @description A prefixed ID of the RedditContent object */
+	id: string;
+	name: string;
 }
 
-export default abstract class RedditContent<Type extends RedditContent<Type>>{
+export default abstract class RedditContent<Type extends RedditContent<Type>> {
+	protected _fetch?: Type;
 
-    protected _fetch?: Type;
+	constructor(
+		options: Partial<Type>,
+		public traw: traw,
+		protected _hasFetched: boolean = false
+	) {
+		// parse options
+		for (const key of Object.keys(options)) {
+			// @ts-expect-error
+			this[key] = options[key];
+		}
 
-    constructor( options: Partial<Type>, public traw: traw, protected _hasFetched: boolean = false ){
+		this._fetch = undefined;
+	}
 
-        // parse options
-        for ( const key of Object.keys(options) ){
-            // @ts-expect-error
-            this[key] = options[key]
-        }
+	public async fetch(): Promise<Type> {
+		if (!this._fetch) {
+			let response = await this.get({ url: this.uri });
+			this._fetch = this.transformApiResponse(response);
+		}
 
-        this._fetch = undefined;
-    }
+		// this._fetch is definitely defined as this point in the code flow
+		return this._fetch!;
+	}
 
-    public async fetch() : Promise<Type> {
-        if ( !this._fetch ){
-            let response = await this.get({ url: this.uri });
-            this._fetch = this.transformApiResponse(response);
-        }
+	public async refresh(): Promise<Type> {
+		return await this.fetch();
+	}
 
-        // this._fetch is definitely defined as this point in the code flow
-        return this._fetch!;
-    }
+	/** @deprecated */ public toJSON() {
+		throw new NotImplemented();
+	}
 
-    public async refresh() : Promise<Type> {
-        return await this.fetch();
-    }
+	/**
+	 * @internal
+	 */
+	protected transformApiResponse(response: AxiosResponse<Type, any>): Type {
+		throw new NotImplemented();
 
-    /** @deprecated */public toJSON(){
-        throw new NotImplemented();
-    }
+		// @ts-expect-error
+		return response;
+	}
 
-    protected transformApiResponse(response: AxiosResponse<Type, any>) : Type {
-        throw new NotImplemented();
+	/**
+	 * @internal
+	 */
+	public clone(deep: boolean = false): Type {
+		throw new NotImplemented();
+	}
 
-        // @ts-expect-error
-        return response;
-    }
+	/**
+	 * @internal
+	 * @description The URI from which the object can be updated.
+	 */
+	public get uri(): string {
+		throw new NotImplemented();
+	}
 
-    public clone(deep: boolean = false) : Type {
-        throw new NotImplemented();
-    }
-
-    public get uri () : string {
-        throw new NotImplemented();
-    }
-
-    public get( options: any ){ return this.traw.get(options) }
-    //public delete( options: any ){ return this.traw.delete(options) }
-    public head( options: any ){ return this.traw.head(options) }
-    public patch( options: any ){ return this.traw.patch(options) }
-    public post( options: any ){ return this.traw.post(options) }
-    public put( options: any ){ return this.traw.put(options) }
+	/** @internal */ public get(options: any) {
+		return this.traw.get(options);
+	}
+	// /** @internal */ public delete( options: any ){ return this.traw.delete(options) }
+	/** @internal */ public head(options: any) {
+		return this.traw.head(options);
+	}
+	/** @internal */ public patch(options: any) {
+		return this.traw.patch(options);
+	}
+	/** @internal */ public post(options: any) {
+		return this.traw.post(options);
+	}
+	/** @internal */ public put(options: any) {
+		return this.traw.put(options);
+	}
 }
