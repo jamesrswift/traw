@@ -686,10 +686,19 @@ export default class traw {
 
 // #region Modnotes
 
-	public async getModnotes( user: RedditUser, subreddit: Subreddit, filter?: NoteType, limit?: number, before?: string) : Promise<ModnoteResponse>{
+	/**
+	 * 
+	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
+	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
+	 * @param filter Optionally, filter results by label type
+	 * @param limit Optionally, restrict quantity of notes returned. Default: 25, Max: 100
+	 * @param before Optionally, restrict results to historical modnotes (not sure of the format of this parameter)
+	 * @returns Requested modnotes in ModnoteResponse format
+	 */
+	public async getModnotes(user: RedditUser | string , subreddit: Subreddit | string, filter?: NoteType, limit?: number, before?: string) : Promise<ModnoteResponse>{
 		const query : any = {};
-		query.user = user.name;
-		query.subreddit = subreddit.display_name;
+		query.user = user instanceof RedditUser ? user.name : user;
+		query.subreddit = subreddit instanceof Subreddit ? subreddit.display_name : subreddit;
 
 		if ( filter != undefined ) query.filter = filter;
 		if ( limit != undefined ) query.limit = limit;
@@ -701,12 +710,20 @@ export default class traw {
 		})).data as ModnoteResponse
 	}
 
-	public async deleteModnote(user: RedditUser, subreddit: Subreddit, note_id: string) : Promise<this>{
+	/**
+	 * 
+	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
+	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
+	 * @param note_id ID of the note to be moved, typically in the format of ModNote_{UUID}
+	 * @returns 
+	 */
+
+	public async deleteModnote(user: RedditUser | string , subreddit: Subreddit | string, note_id: string) : Promise<this>{
 		await this.delete({
 			url: '/api/mod/notes',
 			params:{
-				user: user.name,
-				subreddit: subreddit.display_name,
+				user: user instanceof RedditUser ? user.name : user,
+				subreddit: subreddit instanceof Subreddit ? subreddit.display_name : subreddit,
 				note_id
 			}
 		})
@@ -715,17 +732,17 @@ export default class traw {
 
 	/**
 	 * @summary Create a mod note for a user on a subreddit
-	 * @param user RedditUser object about which the note is to be made
-	 * @param subreddit Subreddit object on which the note should exist
+	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
+	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
 	 * @param note Text (upto 250 characters) to be stored
 	 * @param link Optionally, a prefixed RedditContent ID that the note should link to
 	 * @param label Optionally, the type of modnote to be created
 	 * @returns Newly created modnote
 	 */
-	public async createModnote(user: RedditUser, subreddit: Subreddit, note: string, link?: string, label?: NoteLabel) : Promise<Modnote> {
+	public async createModnote(user: RedditUser | string , subreddit: Subreddit | string, note: string, link?: string, label?: NoteLabel) : Promise<Modnote> {
 		const query: any = {}
-		query.user = user.name;
-		query.subreddit = subreddit.display_name;
+		query.user = user instanceof RedditUser ? user.name : user;
+		query.subreddit = subreddit instanceof Subreddit ? subreddit.display_name : subreddit;
 		query.note = note;
 		if ( label ) query.label = label;
 		if ( link ) query.reddit_id = link;
