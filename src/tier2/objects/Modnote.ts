@@ -58,7 +58,7 @@ export default interface Modnote extends RedditContent<Modnote> {
 	operator_id: string;
 
 	/** @summary Display name (unprefixed) of the RedditUser that made the note */
-	operate: string;
+	operator: string;
 
 	/** @summary Prefixed RedditUser ID that is the object of the note */
 	user_id: string;
