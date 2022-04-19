@@ -72,7 +72,7 @@ export default interface Modnote extends RedditContent<Modnote> {
 	/** @summary  */
 	user_note_data: user_note_data;
 
-	/** @summary Base64 encoded value? */
+	/** @summary Base64 encoded value? Looks like B64 encoded value of time note was created in ms since epoch	 */
 	cursor: string;
 
 	/** @summary  */
@@ -90,5 +90,13 @@ export interface ModnoteResponse {
 export default class Modnote extends RedditContent<Modnote> {
 	public override get uri(): string {
 		return `api/mod/notes?note_id=${this.id}`;
+	}
+
+	public async delete() : Promise<void>{
+		if ( this.type != NoteType.NOTE) return;
+		await this.traw.delete({
+			url: `/api/mod/notes`
+		})
+		return 
 	}
 }

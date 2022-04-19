@@ -14,6 +14,7 @@ import Submission from "../objects/Submission";
 import LiveThread, { LiveThreadSettings } from "../objects/LiveThread";
 import ModmailConversation from "../objects/ModmailConversation";
 import MultiReddit, { MultiRedditProperties } from "../objects/MultiReddit";
+import { Modnote, ModnoteResponse, NoteLabel, NoteType } from "../objects";
 
 export default interface traw {
 	_ownUserInfo?: RedditUser;
@@ -682,6 +683,61 @@ export default class traw {
 			);
 		}
 	}
+
+// #region Modnotes
+
+	public async getModnotes( user: RedditUser, subreddit: Subreddit, filter?: NoteType, limit?: number, before?: string) : Promise<ModnoteResponse>{
+		const query : any = {};
+		query.user = user.name;
+		query.subreddit = subreddit.display_name;
+
+		if ( filter != undefined ) query.filter = filter;
+		if ( limit != undefined ) query.limit = limit;
+		if ( before != undefined ) query.before = before;
+		
+		return (await this.get({
+			url: '/api/mod/notes',
+			params: query
+		})).data as ModnoteResponse
+	}
+
+	public async deleteModnote(user: RedditUser, subreddit: Subreddit, note_id: string) : Promise<this>{
+		await this.delete({
+			url: '/api/mod/notes',
+			params:{
+				user: user.name,
+				subreddit: subreddit.display_name,
+				note_id
+			}
+		})
+		return this;
+	}
+
+	/**
+	 * @summary Create a mod note for a user on a subreddit
+	 * @param user RedditUser object about which the note is to be made
+	 * @param subreddit Subreddit object on which the note should exist
+	 * @param note Text (upto 250 characters) to be stored
+	 * @param link Optionally, a prefixed RedditContent ID that the note should link to
+	 * @param label Optionally, the type of modnote to be created
+	 * @returns Newly created modnote
+	 */
+	public async createModnote(user: RedditUser, subreddit: Subreddit, note: string, link?: string, label?: NoteLabel) : Promise<Modnote> {
+		const query: any = {}
+		query.user = user.name;
+		query.subreddit = subreddit.display_name;
+		query.note = note;
+		if ( label ) query.label = label;
+		if ( link ) query.reddit_id = link;
+		const response = (await this.post({
+			url: '/api/mod/notes',
+			params: query
+		})).data as {created: Modnote}
+
+		return response.created
+	}
+
+// #endregion
 
 	public async assignFlair({
 		css_class,
