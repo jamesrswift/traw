@@ -271,10 +271,7 @@ export default class traw {
 	public async getKarma(): Promise<
 		Array<{ sr: Subreddit; comment_karma: number; link_karma: number }>
 	> {
-		throw new NotImplemented();
-
-		// @ts-ignore
-		return this.get({ url: "api/v1/me/karma" });
+		return ( await this.get({ url: "api/v1/me/karma" })).data.data;
 	}
 
 	public async getLivethread(threadId: string): Promise<LiveThread> {
