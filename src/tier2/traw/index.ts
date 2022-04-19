@@ -211,9 +211,25 @@ export default class traw {
 	}
 
 	public async getFriends(): Promise<RedditUser[]> {
-		throw new NotImplemented();
-		// @ts-ignore
-		return this.get({ url: "prefs/friends" });
+
+		const friendsResponse = (await this.get({ url: "prefs/friends" })).data as {
+			kind: string,
+			data : {
+				children: Partial<RedditUser>[]
+			}
+		}[]
+
+		/*
+			Not sure what the second entry of friendsResponse corresponds to, but
+			testing shows the first is what we are looking for. More investigation
+			needed
+		*/
+
+		const friendsList: RedditUser[] = [];
+		for ( const friend of friendsResponse[0].data.children ){
+			friendsList.push(new RedditUser(friend, this, false))
+		}
+		return friendsList;
 	}
 
 	public async getGoldSubreddits(

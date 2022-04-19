@@ -53,11 +53,13 @@ export default class Listing<Type> extends Array<Type> {
         super();
 		for ( let child of options.children ){
 			if ( child.kind != undefined ){
+				//console.log(child.kind)
 				if ( child.kind == 't3' ){
-					// @ts-ignore
 					const submission = new Submission(child.data, traw, true)
-					console.log(this.push( <any>submission ))
-					//console.log("Inserting into listing", submission)
+					this.push( <any>submission )
+				} else if ( child.kind == 't5' ){
+					const subreddit = new Subreddit(child.data, traw, true);
+					this.push(<any>subreddit)
 				}
 			}
 		}
@@ -196,3 +198,4 @@ export function buildRepliesTree(childList: any) {
 }
 
 import Submission from "./Submission";
+import Subreddit from "./Subreddit";

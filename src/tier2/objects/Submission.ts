@@ -115,6 +115,7 @@ export default interface Submission extends VoteableContent<Submission> {
 }
 
 export default class Submission extends VoteableContent<Submission> {
+	is_created_from_ads_ui?: any;
 	constructor(data: Partial<Submission>, traw: traw, _hasFetched: boolean) {
 		super(data, traw, _hasFetched);
 		/*this._callback = this._callback.bind(this);
