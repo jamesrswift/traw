@@ -114,6 +114,10 @@ export default interface Submission extends VoteableContent<Submission> {
 	wls: number;
 }
 
+
+/**
+ * @Category Reddit Objects
+ */
 export default class Submission extends VoteableContent<Submission> {
 	is_created_from_ads_ui?: any;
 	constructor(data: Partial<Submission>, traw: traw, _hasFetched: boolean) {

@@ -85,6 +85,9 @@ export default interface VoteableContent<Type extends VoteableContent<Type>>
 	user_reports: string[];
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class VoteableContent<
 	Type extends VoteableContent<Type>
 > extends ReplyableContent<Type> {

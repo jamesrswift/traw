@@ -87,6 +87,9 @@ export interface ModnoteResponse {
 	has_next_page: false
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class Modnote extends RedditContent<Modnote> {
 	public override get uri(): string {
 		return `api/mod/notes?note_id=${this.id}`;

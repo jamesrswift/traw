@@ -11,6 +11,9 @@ export default interface RedditContent<Type extends RedditContent<Type>> {
 	name: string;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default abstract class RedditContent<Type extends RedditContent<Type>> {
 	protected _fetch?: Type;
 

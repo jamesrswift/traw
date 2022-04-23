@@ -47,6 +47,9 @@ const INTERNAL_DEFAULTS = {
 	_cachedLookahead: null
 };
 
+/**
+ * @Category Reddit Objects
+ */
 export default class Listing<Type> extends Array<Type> {
 
     constructor(options: any, traw: traw){

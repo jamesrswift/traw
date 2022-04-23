@@ -1,7 +1,10 @@
 import { AxiosBasicCredentials } from "axios"
 import authentication_strategy from "./baseclass"
 
-// basic: username/password authentication
+/**
+ * @Category Authentication
+ * @description Username and password authentication
+ */
 export default class basic_authentication extends authentication_strategy {
     public constructor(
         private username: string,

@@ -62,6 +62,9 @@ export default interface RedditUser extends RedditContent<RedditUser> {
 	suspension_expiration_utc: number | null;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class RedditUser extends RedditContent<RedditUser> {
 	public override get uri(): string {
 		return `user/${this.name}/about`;
@@ -179,7 +182,7 @@ export default class RedditUser extends RedditContent<RedditUser> {
 	}
 }
 
-interface Features {
+export interface Features {
 	[key: string]: ExperimentFeature | boolean;
 	chat: boolean;
 	chat_group_rollout: boolean;
@@ -253,7 +256,7 @@ interface Features {
 	geopopular_in: ExperimentFeature;
 }
 
-interface ExperimentFeature {
+export interface ExperimentFeature {
 	owner: string;
 	variant: string;
 	experiment_id: number;

@@ -30,6 +30,9 @@ extends ReplyableContent<PrivateMessage> {
 	was_comment: boolean;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class PrivateMessage
 extends ReplyableContent<PrivateMessage> {
     override get uri() {

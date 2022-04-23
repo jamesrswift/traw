@@ -3,6 +3,9 @@ import { axiosCreate, AxiosRequestConfig } from "../http";
 import userAgent from "../useragent";
 import baseRequestor from "./baseRequestor";
 
+/**
+ * @Category Requestor
+ */
 export default class credentialedRequestor extends baseRequestor{
     protected auth: basic_authentication;
 

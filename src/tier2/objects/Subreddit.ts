@@ -115,6 +115,9 @@ export default interface Subreddit extends RedditContent<Subreddit> {
 	wls: number;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class Subreddit extends RedditContent<Subreddit> {
 	public override get uri(): string {
 		return `r/${this.display_name}/about`;
@@ -827,14 +830,14 @@ export type Sort =
 	| "qa";
 
 // this is per-flair
-interface FlairParams {
+export interface FlairParams {
 	text: string;
 	css_class?: string;
 	text_editable?: boolean;
 }
 
 // this is for the entire subreddit
-interface FlairConfig {
+export interface FlairConfig {
 	userFlairEnabled: boolean;
 	userFlairPosition: "left" | "right";
 	userFlairSelfAssignEnabled: boolean;
@@ -850,22 +853,22 @@ export interface FlairTemplate {
 	flair_text: string;
 }
 
-interface UserFlair {
+export interface UserFlair {
 	flair_css_class: string;
 	user: string;
 	flair_text: string;
 }
 
-interface UserDetails {
+export interface UserDetails {
 	date: number;
 	name: string;
 	id: string;
 }
-type BannedUser = UserDetails & { note: string };
-type MutedUser = UserDetails;
-type Contributor = UserDetails;
+export type BannedUser = UserDetails & { note: string };
+export type MutedUser = UserDetails;
+export type Contributor = UserDetails;
 
-type SubredditType =
+export type SubredditType =
 	| "public"
 	| "private"
 	| "restricted"
@@ -873,9 +876,9 @@ type SubredditType =
 	| "gold_only"
 	| "archived"
 	| "employees_only";
-type LinkType = "any" | "link" | "self";
+export type LinkType = "any" | "link" | "self";
 
-type SpamLevel = "low" | "high" | "all";
+export type SpamLevel = "low" | "high" | "all";
 export interface SubredditSettings {
 	name: string;
 	title: string;
@@ -905,13 +908,13 @@ export interface SubredditSettings {
 	default_set?: boolean;
 }
 
-interface ImageUploadOptions {
+export interface ImageUploadOptions {
 	file: string | NodeJS.ReadableStream;
 	imageType?: string;
 	name?: string
 }
 
-interface Rule {
+export interface Rule {
 	kind: string;
 	short_name: string;
 	description: string;
@@ -921,7 +924,7 @@ interface Rule {
 	description_html: string;
 }
 
-type ModeratorPermission =
+export type ModeratorPermission =
 	| "wiki"
 	| "posts"
 	| "access"
@@ -929,7 +932,7 @@ type ModeratorPermission =
 	| "config"
 	| "flair";
 
-interface BanOptions {
+export interface BanOptions {
 	name: string;
 	banMessage?: string;
 	banReason?: string;
@@ -937,7 +940,7 @@ interface BanOptions {
 	banNote?: string;
 }
 
-type Timespan = "hour" | "day" | "week" | "month" | "year" | "all";
+export type Timespan = "hour" | "day" | "week" | "month" | "year" | "all";
 
 export type ModActionType =
 	| "banuser"

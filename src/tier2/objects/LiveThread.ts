@@ -18,7 +18,10 @@ export default interface LiveThread extends RedditContent<LiveThread> {
     viewer_count: number | null;
     websocket_url: string | null;
 }
-  
+
+/**
+ * @Category Reddit Objects
+ */
 export default class LiveThread extends RedditContent<LiveThread> {
     public async acceptContributorInvite(): Promise<this>{
         throw new NotImplemented()
@@ -89,8 +92,8 @@ export default class LiveThread extends RedditContent<LiveThread> {
     
 }
   
-type Permissions = 'update' | 'edit' | 'manage';
-type ReportReason = 'spam' | 'vote-manipulation' | 'personal-information' | 'sexualizing-minors' | 'site-breaking';
+export type Permissions = 'update' | 'edit' | 'manage';
+export type ReportReason = 'spam' | 'vote-manipulation' | 'personal-information' | 'sexualizing-minors' | 'site-breaking';
   
 export interface LiveThreadSettings {
     title: string;
@@ -99,7 +102,7 @@ export interface LiveThreadSettings {
     nsfw?: boolean;
 }
   
-interface LiveUpdate {
+export interface LiveUpdate {
     body: string;
     name: string;
     embeds: Embed[];
@@ -112,13 +115,13 @@ interface LiveUpdate {
     id: string;
 }
   
-interface Embed {
+export interface Embed {
     url: string;
     width: number;
     height: number;
 }
   
-interface MobileEmbed extends Embed {
+export interface MobileEmbed extends Embed {
     provider_url: string;
     original_url: string;
     version: string;

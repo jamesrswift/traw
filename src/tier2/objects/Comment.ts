@@ -21,6 +21,9 @@ export default interface Comment extends VoteableContent<Comment> {
 	spam: boolean;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class Comment extends VoteableContent<Comment> {
 	constructor(
 		options: Partial<Comment>,

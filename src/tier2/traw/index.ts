@@ -24,6 +24,7 @@ export default class traw {
 	constructor(protected requestor: baseRequestor) {}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -33,6 +34,7 @@ export default class traw {
 	}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -42,6 +44,7 @@ export default class traw {
 	}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -51,6 +54,7 @@ export default class traw {
 	}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -60,6 +64,7 @@ export default class traw {
 	}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -69,6 +74,7 @@ export default class traw {
 	}
 
 	/**
+	 * @category HTTP
 	 * @internal
 	 * @param options AxiosRequestConfig<any> formatted query
 	 * @returns AxiosResponse<any,any> data
@@ -403,12 +409,20 @@ export default class traw {
 		});
 	}
 
+	/**
+	 * @category Modmail
+	 * @param options 
+	 */
 	public async getNewModmailConversations(
 		options?: ListingOptions & { entity?: string }
 	): Promise<Listing<ModmailConversation>> {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 * @param options 
+	 */
 	public async createModmailDiscussion(options: {
 		body: string;
 		subject: string;
@@ -417,28 +431,46 @@ export default class traw {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 * @param id 
+	 */
 	public async getNewModmailConversation(
 		id: string
 	): Promise<ModmailConversation> {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 * @param convs 
+	 */
 	public async markNewModmailConversationsAsRead(
 		convs: ModmailConversation[]
 	): Promise<void> {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 * @param convs 
+	 */
 	public async markNewModmailConversationsAsUnread(
 		convs: ModmailConversation[]
 	): Promise<void> {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 */
 	public async getNewModmailSubreddits(): Promise<Subreddit[]> {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 */
 	public async getUnreadNewModmailConversationsCount(): Promise<{
 		highlighted: number;
 		notifications: number;
@@ -451,6 +483,11 @@ export default class traw {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * @category Modmail
+	 * @param subs 
+	 * @param state 
+	 */
 	public async bulkReadNewModmail(
 		subs: Array<Subreddit | string>,
 		state:
@@ -716,7 +753,7 @@ export default class traw {
 //#region Modnotes
 
 	/**
-	 * 
+	 * @category Modnotes
 	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
 	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
 	 * @param filter Optionally, filter results by label type
@@ -740,7 +777,7 @@ export default class traw {
 	}
 
 	/**
-	 * 
+	 * @category Modnotes
 	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
 	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
 	 * @param note_id ID of the note to be moved, typically in the format of ModNote_{UUID}
@@ -760,6 +797,7 @@ export default class traw {
 
 	/**
 	 * @summary Create a mod note for a user on a subreddit
+	 * @category Modnotes
 	 * @param user RedditUser object about which the note is to be made, or a string of the user's unprefixed name
 	 * @param subreddit Subreddit object on which the note should exist, or a string of the subreddit's unprefixed display name
 	 * @param note Text (upto 250 characters) to be stored
@@ -782,6 +820,9 @@ export default class traw {
 		return response.created
 	}
 
+	/**
+	 * @category Modnotes
+	 */
 	public async getRecentModnotes( ){
 		throw new NotImplemented();
 	}

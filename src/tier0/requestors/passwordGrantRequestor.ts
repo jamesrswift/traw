@@ -14,6 +14,9 @@ export interface passwordGrantRequestorArguments{
     two_factor_code?: string
 }
 
+/**
+ * @Category Requestor
+ */
 export default class passwordGrantRequestor extends tokenRequestor{
 
     private arguments: passwordGrantRequestorArguments;

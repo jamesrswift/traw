@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Typescript Reddit API Wrapper",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "test:coverage": "nyc npm run test",

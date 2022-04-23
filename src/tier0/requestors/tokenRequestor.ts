@@ -17,6 +17,9 @@ export interface credentialsResponse {
     error_description: string
 }
 
+/**
+ * @Category Requestor
+ */
 export default class tokenRequestor extends baseRequestor{
 
     private credentialedRequestor: credentialedRequestor;

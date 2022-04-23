@@ -10,6 +10,9 @@ export default interface ReplyableContent<Type extends ReplyableContent<Type>>
 	replies: Listing<Comment | PrivateMessage>;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class ReplyableContent<
 	Type extends ReplyableContent<Type>
 > extends RedditContent<Type> {

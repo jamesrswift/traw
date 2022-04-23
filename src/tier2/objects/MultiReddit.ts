@@ -20,6 +20,9 @@ export default interface MultiReddit extends RedditContent<MultiReddit> {
 	weighting_schema: MultiRedditWeightingSchema;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class MultiReddit extends RedditContent<MultiReddit> {
 
 	constructor(options: Partial<MultiReddit>, traw: traw, protected _hasFetched: boolean){
@@ -115,9 +118,9 @@ export interface MultiRedditProperties {
 	weighting_scheme?: MultiRedditWeightingSchema;
 }
 
-type MultiRedditWeightingSchema = "classic" | "fresh";
-type MultiRedditVisibility = "private" | "public" | "hidden";
-type MultiRedditIcon =
+export type MultiRedditWeightingSchema = "classic" | "fresh";
+export type MultiRedditVisibility = "private" | "public" | "hidden";
+export type MultiRedditIcon =
 	| "art and design"
 	| "ask"
 	| "books"

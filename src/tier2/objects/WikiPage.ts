@@ -18,6 +18,9 @@ export default interface WikiPage extends RedditContent<WikiPage>{
     title: string;
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class WikiPage extends RedditContent<WikiPage>{
 
     public override get uri() : string {
@@ -109,12 +112,12 @@ export default class WikiPage extends RedditContent<WikiPage>{
     }
 }
 
-interface Settings {
+export interface Settings {
     listed: boolean;
     permissionLevel: 0 | 1 | 2;
 }
   
-interface EditOptions {
+export interface EditOptions {
     text: string;
     reason?: string;
     previousRevision?: string;

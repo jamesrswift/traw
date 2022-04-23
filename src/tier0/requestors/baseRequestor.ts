@@ -22,6 +22,9 @@ export interface State {
     initialGrantType?: grantType
 }
 
+/**
+ * @Category Requestor
+ */
 export default abstract class baseRequestor{
 
     protected userAgent: userAgent;

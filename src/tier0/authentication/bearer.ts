@@ -1,6 +1,9 @@
 import authentication_strategy from "./baseclass";
 
-// bearer: access token authentication, not refresh token authentication
+/**
+ * @Category Authentication
+ * @description Bearer authentication
+ */
 export default class bearer_authentication extends authentication_strategy{
     constructor(
         private bearer: string

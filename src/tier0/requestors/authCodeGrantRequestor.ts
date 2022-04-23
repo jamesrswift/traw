@@ -13,6 +13,9 @@ export interface authCodeGrantRequestorArguments{
     redirect_uri: string
 }
 
+/**
+ * @Category Requestor
+ */
 export default class authCodeGrantRequestor extends tokenRequestor{
 
     private arguments: authCodeGrantRequestorArguments;

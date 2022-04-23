@@ -73,6 +73,9 @@ export default interface ModmailConversation
 	messages?: ModmailMessage[];
 }
 
+/**
+ * @Category Reddit Objects
+ */
 export default class ModmailConversation extends RedditContent<ModmailConversation> {
 	static conversationStates: conversationStates;
 	static modActionStats: modActionStates;
