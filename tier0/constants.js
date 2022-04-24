@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LIVETHREAD_PERMISSIONS = exports.MODERATOR_PERMISSIONS = exports.MAX_LISTING_ITEMS = exports.api_type = exports.API_RULES_LINK = exports.DOCS_LINK = exports.VERSION = exports.MODULE_NAME = void 0;
+exports.MODULE_NAME = 'traw';
+exports.VERSION = '0.0.1';
+exports.DOCS_LINK = 'https://not-an-aardvark.github.io/snoowrap/';
+exports.API_RULES_LINK = 'https://github.com/reddit/reddit/wiki/API';
+exports.api_type = 'json';
+exports.MAX_LISTING_ITEMS = 100;
+exports.MODERATOR_PERMISSIONS = ['wiki', 'posts', 'access', 'mail', 'config', 'flair'];
+exports.LIVETHREAD_PERMISSIONS = ['update', 'edit', 'manage'];

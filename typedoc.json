@@ -1,6 +1,0 @@
-{
-    "entryPoints": ["./src/index.ts"],
-    "out": "docs",
-    "entryPointStrategy": "expand",
-    "exclude": "**/*.{test}.tSs"
-}
