@@ -145,3 +145,4 @@ build/
 docs/
 ignored/
 coverage-ts/
+./mochavariables.json
